@@ -7,9 +7,9 @@ from urllib.request import urlopen
 
 app = Flask(__name__)
 
-AUTH0_DOMAIN = @TODO_REPLACE_WITH_YOUR_DOMAIN
+AUTH0_DOMAIN = 'dev-mjhbba6a.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = @TODO_REPLACE_WITH_YOUR_API_AUDIENCE
+API_AUDIENCE = 'myapi'
 
 
 class AuthError(Exception):
@@ -21,6 +21,30 @@ class AuthError(Exception):
 def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
     """
+    
+    
+    incoming_data=request.headers
+    #incoming_data=request.headers.get('Connection', None)
+    print('incoming_data: ', incoming_data)
+    
+    #the headers are basically dictionaries and the .get method gives us the payload for given key
+    
+    #incoming_data:  
+    #Host: localhost:5000
+    #User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0
+    #Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    #Accept-Language: en-US,en;q=0.5
+    #Accept-Encoding: gzip, deflate
+    #Connection: keep-alive
+    #Upgrade-Insecure-Requests: 1
+    #Sec-Fetch-Dest: document
+    #Sec-Fetch-Mode: navigate
+    #Sec-Fetch-Site: none
+    #Sec-Fetch-User: ?1
+    #Cache-Control: max-age=0
+
+
+    
     auth = request.headers.get('Authorization', None)
     if not auth:
         raise AuthError({
@@ -122,3 +146,4 @@ def requires_auth(f):
 def headers(payload):
     print(payload)
     return 'Access Granted'
+    

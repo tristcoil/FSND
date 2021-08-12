@@ -1,0 +1,25 @@
+
+
+Authorize link:
+
+https://dev-mjhbba6a.us.auth0.com/authorize?audience=myapi&response_type=token&client_id=jJhcQu4ws1YXBACNxFPglBJ2KzISb12w&redirect_uri=http://localhost:5000/headers
+
+
+dummy user
+michal.vasulka@gmail.com
+Udacitypassword123
+
+
+to fix werkzeug error
+TypeError: required field "type_ignores" missing from Module
+https://stackoverflow.com/questions/60140174/basic-flask-app-not-running-typeerror-required-field-type-ignores-missing-fr
+
+
+photographer token for my user:
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFtVXQ3UG1wbFJ0NkZQQm1WN1Z0dSJ9.eyJpc3MiOiJodHRwczovL2Rldi1tamhiYmE2YS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjExNDFjNDQ1NGUwMzIwMDY5MWU1ZDY0IiwiYXVkIjoibXlhcGkiLCJpYXQiOjE2Mjg3MTMzOTksImV4cCI6MTYyODcyMDU5OSwiYXpwIjoiakpoY1F1NHdzMVlYQkFDTnhGUGdsQkoyS3pJU2IxMnciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDppbWFnZXMiLCJwb3N0OmltYWdlcyJdfQ.J6krKh4ZLPLv-D0ozMe9ifTBsaEpdGPNqjfDZJL6t9TK7eXO9vVkwX2UacqQ2le5YPU_8p6iIfhRXzGmZsRmtxy7QvMHTn2ElhJd8DTN_pEPBcZd5j3bo-j29ybW4QN8jReXbgtZs9J3z8tmuCXJvxHtdRrZ9XTk2bLLz_yLQY0PLDrSLVqM3cOvWDT4LlVerFIMO1EMsyo0p6s_bVNrSM4TruEJqed4zOMPUwMA1RVxKXlmLK8AhOVMtuJu5ZJAyCtuNvwVw1i6KBCNjI1bek68LVxD-tOOg3m_Kr-LYayx9OZU40jReWzBajnYwzAMSYHqNqqwfApGmwIWRKWN1A
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+QuestionView:
+url: `/questions?page=${this.state.page}`, //TODO: update request URL
+url: `/categories/${id}/questions`, //TODO: update request URL
+url: `/questions`, //TODO: update request URL
+url: `/questions/${id}`, //TODO: update request URL
+
+FormView:
+url: `/categories`, //TODO: update request URL
+url: '/questions', //TODO: update request URL
+
+QuizView:
+url: `/categories`, //TODO: update request URL
+url: '/quizzes', //TODO: update request URL
+
+
+
+

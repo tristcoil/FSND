@@ -1,0 +1,17 @@
+coil@coil-VM:~/Desktop/FSND/projects/01_fyyur$ node -v
+Command 'node' not found, but can be installed with:
+sudo apt install nodejs
+coil@coil-VM:~/Desktop/FSND/projects/01_fyyur$ 
+
+
+coil@coil-VM:~/Desktop/FSND/projects/01_fyyur$ npm -v
+Command 'npm' not found, but can be installed with:
+sudo apt install npm
+coil@coil-VM:~/Desktop/FSND/projects/01_fyyur$
+
+
+
+createdb fyuur
+
+# TODO IMPLEMENT DATABASE URL
+SQLALCHEMY_DATABASE_URI = 'postgresql://coil:tristania@localhost:5432/fyuur'
