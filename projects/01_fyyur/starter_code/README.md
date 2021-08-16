@@ -197,5 +197,14 @@ https://knowledge.udacity.com/questions/650201     # getlist method helped
 example of foreign keys - for Shows
 https://knowledge.udacity.com/questions/653784
 
+parent and child relations:
+https://knowledge.udacity.com/questions/654966
+https://knowledge.udacity.com/questions/510080#510112
+https://knowledge.udacity.com/questions/637391#637486
+https://knowledge.udacity.com/questions/510080#510112
 
+how to populate venue by venue ID:
+https://knowledge.udacity.com/questions/622051
 
+# for time comparisons
+https://stackoverflow.com/questions/19887353/attributeerror-str-object-has-no-attribute-strftime

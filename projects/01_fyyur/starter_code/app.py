@@ -13,6 +13,7 @@ import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
+from datetime import datetime
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -47,6 +48,10 @@ class Venue(db.Model):
     website_link = db.Column(db.String)
     seeking_talent = db.Column(db.String)
     seeking_description = db.Column(db.String)
+    
+    # this creates collection of Show objects on Venue called Venue.shows
+    shows = db.relationship('Show', backref='venue', lazy="joined")
+    
     #past_shows=
     #upcoming_shows=
     #past_shows_count=
@@ -101,11 +106,13 @@ class Artist(db.Model):
     website_link = db.Column(db.String(120))
     seeking_venue = db.Column(db.String(120))
     seeking_description = db.Column(db.String(120))
+    shows = db.relationship('Show', backref='artist', lazy="joined")
 
     
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 
+# show is CHILD TABLE
 class Show(db.Model):
     __tablename__ = 'Show'
     
@@ -113,12 +120,9 @@ class Show(db.Model):
     start_time = db.Column(db.String)
     #shows are connected to artist and to venue as well
     # so there might be like parent / child relation
-    artist_id  = db.Column(db.String)
-    venue_id   = db.Column(db.String)
+    artist_id  = db.Column(db.Integer, db.ForeignKey('Artist.id'))
+    venue_id   = db.Column(db.Integer, db.ForeignKey('Venue.id'))
     start_time = db.Column(db.String)
-
-
-
 
 
 
@@ -407,6 +411,54 @@ def search_artists():
 def show_artist(artist_id):
   # shows the artist page with the given artist_id
   # TODO: replace with real artist data from the artist table, using artist_id
+  
+  print ('call to ARTISTS ID PAGE')
+  shows = db.session.query(Show).join(Artist.shows).filter(Artist.id == artist_id).all()
+  artist = Artist.query.filter_by(id=artist_id).first()
+
+  past_shows = []
+  upcoming_shows = []
+  data = []
+  my_dict = {}
+ 
+  for show in shows:
+  
+      start_time = show.start_time
+      start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+      
+      placeholder_show = {"venue_id": show.venue_id,
+                   "venue_name": show.venue.name,
+                   "venue_image_link": show.venue.image_link,
+                   "start_time": show.start_time
+                   }
+
+      if start_time <= datetime.now():
+          past_shows.append(placeholder_show)
+      else:
+          upcoming_shows.append(placeholder_show)    
+
+      my_dict = { 
+          "id": artist_id,
+          "name": artist.name,
+          "genres": artist.genres,
+          "city": artist.city,
+          "state": artist.state,
+          "phone": artist.phone,
+          "website": artist.website_link,
+          "facebook_link": artist.facebook_link,
+          "seeking_venue": artist.seeking_venue,
+          "seeking_description": artist.seeking_description,
+          "image_link": artist.image_link,  
+          "past_shows": past_shows,
+          "upcoming_shows": upcoming_shows,
+          "past_shows_count": len(past_shows),
+          "upcoming_shows_count": len(upcoming_shows)
+          }
+
+      print('my_dict', my_dict)
+      data.append(my_dict)
+
+  
   data1={
     "id": 4,
     "name": "Guns N Petals",
@@ -429,6 +481,7 @@ def show_artist(artist_id):
     "past_shows_count": 1,
     "upcoming_shows_count": 0,
   }
+  
   data2={
     "id": 5,
     "name": "Matt Quevedo",
@@ -449,6 +502,7 @@ def show_artist(artist_id):
     "past_shows_count": 1,
     "upcoming_shows_count": 0,
   }
+  
   data3={
     "id": 6,
     "name": "The Wild Sax Band",
@@ -478,7 +532,9 @@ def show_artist(artist_id):
     "past_shows_count": 0,
     "upcoming_shows_count": 3,
   }
-  data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]
+  
+  #-#-#-#data = list(filter(lambda d: d['id'] == artist_id, [my_dict, data1, data2, data3] ))[0]     # with
+  data = list(filter(lambda d: d['id'] == artist_id, data ))[0]   # with my payload
   return render_template('pages/show_artist.html', artist=data)
 
 #  Update
@@ -595,6 +651,44 @@ def shows():
   # displays list of shows at /shows
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
+
+
+  print ('WTTTTTTTTTFFFFFFFFFFFFFF')
+  artist_id = 1
+  shows = db.session.query(Show).join(Artist.shows).filter(Artist.id == artist_id).all()
+  #print('show is shows', shows.artist)
+  #print()
+  
+  #venue_id = 1
+  
+  #venue = Venue.query.get_or_404(venue_id)
+  
+  past_shows = []
+  upcoming_shows = []
+  
+  for show in shows:
+      temp_show = {
+          #'artist_id': show.artist_id,
+          #'show_id': show.id,
+          #'show_venueid': show.venue_id,
+          #'show_starttime': show.start_time
+          'venue_id': show.venue_id,
+          'venue_name': show.venue.name,
+          'artist_genres': show.artist.genres,
+          'venue_genres': show.venue.genres
+          ###
+          ###
+      }
+  
+  
+      print('lololololo',temp_show)
+  
+  
+  
+  
+  
+  
+
   data=[{
     "venue_id": 1,
     "venue_name": "The Musical Hop",
@@ -602,35 +696,45 @@ def shows():
     "artist_name": "Guns N Petals",
     "artist_image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
     "start_time": "2019-05-21T21:30:00.000Z"
-  }, {
-    "venue_id": 3,
-    "venue_name": "Park Square Live Music & Coffee",
-    "artist_id": 5,
-    "artist_name": "Matt Quevedo",
-    "artist_image_link": "https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
-    "start_time": "2019-06-15T23:00:00.000Z"
-  }, {
-    "venue_id": 3,
-    "venue_name": "Park Square Live Music & Coffee",
-    "artist_id": 6,
-    "artist_name": "The Wild Sax Band",
-    "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-    "start_time": "2035-04-01T20:00:00.000Z"
-  }, {
-    "venue_id": 3,
-    "venue_name": "Park Square Live Music & Coffee",
-    "artist_id": 6,
-    "artist_name": "The Wild Sax Band",
-    "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-    "start_time": "2035-04-08T20:00:00.000Z"
-  }, {
-    "venue_id": 3,
-    "venue_name": "Park Square Live Music & Coffee",
-    "artist_id": 6,
-    "artist_name": "The Wild Sax Band",
-    "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-    "start_time": "2035-04-15T20:00:00.000Z"
   }]
+  
+  #data=[{
+  #  "venue_id": 1,
+  #  "venue_name": "The Musical Hop",
+  #  "artist_id": 4,
+  #  "artist_name": "Guns N Petals",
+  #  "artist_image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
+  #  "start_time": "2019-05-21T21:30:00.000Z"
+  #}, {
+  #  "venue_id": 3,
+  #  "venue_name": "Park Square Live Music & Coffee",
+  #  "artist_id": 5,
+  #  "artist_name": "Matt Quevedo",
+  #  "artist_image_link": "https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
+  #  "start_time": "2019-06-15T23:00:00.000Z"
+  #}, {
+  #  "venue_id": 3,
+  #  "venue_name": "Park Square Live Music & Coffee",
+  #  "artist_id": 6,
+  #  "artist_name": "The Wild Sax Band",
+  #  "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
+  #  "start_time": "2035-04-01T20:00:00.000Z"
+  #}, {
+  #  "venue_id": 3,
+  #  "venue_name": "Park Square Live Music & Coffee",
+  #  "artist_id": 6,
+  #  "artist_name": "The Wild Sax Band",
+  #  "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
+  #  "start_time": "2035-04-08T20:00:00.000Z"
+  #}, {
+  #  "venue_id": 3,
+  #  "venue_name": "Park Square Live Music & Coffee",
+  #  "artist_id": 6,
+  #  "artist_name": "The Wild Sax Band",
+  #  "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
+  #  "start_time": "2035-04-15T20:00:00.000Z"
+  #}]
+  
   return render_template('pages/shows.html', shows=data)
 
 @app.route('/shows/create')
