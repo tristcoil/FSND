@@ -239,11 +239,32 @@ def search_venues():
   data = []
   
   # !!!!!!!!!!!!!!!!! fix number of upcoming shows later, but frontend is not even reflecting that, so thats strange
+  # maybe fix like this is enough
   
-  for artist in artists:
-      my_dict = {"id": artist.id,
-                 "name": artist.name,
-                 "num_upcoming_shows": 0
+  for venue in venues:
+      venue_id = venue.id
+      
+      shows = db.session.query(Show).join(Venue.shows).filter(Venue.id == venue_id).all()
+
+      upcoming_shows = []
+      my_dict = {}
+ 
+      for show in shows:
+          start_time = show.start_time
+          start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+      
+          tmp_show = {"artist_id": show.artist_id,
+                          "artist_name": show.artist.name,
+                          "artist_image_link": show.artist.image_link,
+                          "start_time": show.start_time
+                         }
+
+          if start_time > datetime.now():
+              upcoming_shows.append(tmp_show)   
+
+      my_dict = {"id": venue.id,
+                 "name": venue.name,
+                 "num_upcoming_shows": len(upcoming_shows)
                 }
   
       data.append(my_dict) 
@@ -252,6 +273,9 @@ def search_venues():
               "data": data
              }  
   
+  print('VENUE RESPONSE: ', response)
+  
+ 
   #response={
   #  "count": 1,
   #  "data": [{
@@ -620,11 +644,33 @@ def search_artists():
   
   
   # !!!!!!!!!!!!!!!!! fix number of upcoming shows later, but frontend is not even reflecting that, so thats strange, likely value not needed
+  # likely fixed now
   
   for artist in artists:
+      artist_id = artist.id
+      
+      shows = db.session.query(Show).join(Artist.shows).filter(Artist.id == artist_id).all()
+
+      upcoming_shows = []
+      my_dict = {}
+ 
+      for show in shows:
+          start_time = show.start_time
+          start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+      
+          tmp_show = {"artist_id": show.artist_id,
+                      "artist_name": show.artist.name,
+                      "artist_image_link": show.artist.image_link,
+                      "start_time": show.start_time
+                     }
+
+          if start_time > datetime.now():
+              upcoming_shows.append(tmp_show)   
+  
+  
       my_dict = {"id": artist.id,
                  "name": artist.name,
-                 "num_upcoming_shows": 0
+                 "num_upcoming_shows": len(upcoming_shows)
                 }
   
       data.append(my_dict) 
@@ -632,6 +678,8 @@ def search_artists():
   response = {"count": count,
               "data": data
              }
+  
+
   
   #response={
   #  "count": 1,
