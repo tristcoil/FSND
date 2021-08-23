@@ -208,3 +208,18 @@ https://knowledge.udacity.com/questions/622051
 
 # for time comparisons
 https://stackoverflow.com/questions/19887353/attributeerror-str-object-has-no-attribute-strftime
+
+# how to list venues
+https://knowledge.udacity.com/questions/627816
+
+# list of SQL ORM queries
+https://video.udacity-data.com/topher/2019/August/5d5a52af_query-cheat-sheet/query-cheat-sheet.pdf
+
+# edit database records
+https://knowledge.udacity.com/questions/470242
+
+# aggregating shows based on venue nae
+https://knowledge.udacity.com/questions/258519
+https://knowledge.udacity.com/questions/484218
+
+
