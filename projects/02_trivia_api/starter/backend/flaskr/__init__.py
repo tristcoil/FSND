@@ -91,26 +91,27 @@ def create_app(test_config=None):
   Clicking on the page numbers should update the questions.
   '''
 # I wrote this part
-#  @app.route("/questions")
-#  def retrieve_questions():
-#      selection = Question.query.order_by(Question.id).all()
-#      current_questions = paginate_questions(request, selection)
-#
-#      category_selection = Category.query.order_by(Category.id).all()
-#      categories = [category.id for category in category_selection]
-#
-#      if len(current_questions) == 0:
-#          abort(404)
-#
-#      return jsonify(
-#          {
-#              "success": True,
-#              "questions": current_questions,
-#              "total_questions": len(Question.query.all()),
-#              "categories": categories,
-#              "current_category": "history"
-#          }
-#      )
+  @app.route("/questions")
+  def retrieve_questions():
+      selection = Question.query.order_by(Question.id).all()
+      current_questions = paginate_questions(request, selection)
+
+      category_selection = Category.query.order_by(Category.id).all()
+      #categories = [category.id for category in category_selection]
+      categories = {category.id: category.type for category in category_selection}
+
+      if len(current_questions) == 0:
+          abort(404)
+
+      return jsonify(
+          {
+              "success": True,
+              "questions": current_questions,
+              "total_questions": len(Question.query.all()),
+              "categories": categories,
+              "current_category": None
+          }
+      )
 
 
 

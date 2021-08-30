@@ -7,3 +7,5 @@ flask run
 
 -----------------------
 Sources:
+fixing categories to dictionary
+https://knowledge.udacity.com/questions/664537
