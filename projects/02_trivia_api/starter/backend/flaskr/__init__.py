@@ -28,7 +28,7 @@ def create_app(test_config=None):
   '''
   @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   '''
-
+  # implemented below
   '''
   @TODO: Use the after_request decorator to set Access-Control-Allow
   '''
@@ -133,7 +133,8 @@ def create_app(test_config=None):
 
           question.delete()
 
-          #after deletion we can maybe paginate all questions that are left
+          # !!! after deletion we can maybe paginate all questions that are left
+          # but in the GUI it seems to be working fine, so not sure if it is needed
           return jsonify({"success": True,
                           "deleted": question_id})
 
@@ -173,6 +174,8 @@ def create_app(test_config=None):
                           ).all()
 
               current_questions = paginate_questions(request, selection)
+
+              # !!! do we need current category in response???
               return jsonify(
                          {"success": True,
                           "questions": current_questions,
@@ -185,9 +188,16 @@ def create_app(test_config=None):
               question = Question(question=new_question, answer=new_answer, category=new_category, difficulty=new_difficulty)
               question.insert()
 
-              # !!!return also paginated view eventually
+              # include the newly added question in response
+              selection = Question.query.order_by(Question.id).all()
+              current_questions = paginate_questions(request, selection)
+
+              # returns also paginated view eventually
               return jsonify({"success": True,
-                              "created": question.id})
+                              "created": question.id,
+                              "questions": current_questions,
+                              "total_questions": len(Question.query.all())
+                            })
 
       except:
           abort(422)
@@ -195,7 +205,7 @@ def create_app(test_config=None):
 
 
   '''
-  @TODO: hmm also doable, add some aborts
+  @TODO: IMPLEMENTED ABOVE
   Create a POST endpoint to get questions based on a search term.
   It should return any questions for whom the search term
   is a substring of the question.
@@ -204,7 +214,7 @@ def create_app(test_config=None):
   only question that include that string within their question.
   Try using the word "title" to start.
   '''
-  # implemeted in above function
+  # actually implemeted in the above function, since both are POST calls
   #NOTES: /questions     POST     payload comes with searchTerm
   #expects:
   #success
@@ -273,7 +283,7 @@ def create_app(test_config=None):
 
 
   '''
-  @TODO:
+  @TODO:   NO IDEA HOW TO PROGRAM IT
   Create a POST endpoint to get questions to play the quiz.
   This endpoint should take category and previous question parameters
   and return a random questions within the given category,
