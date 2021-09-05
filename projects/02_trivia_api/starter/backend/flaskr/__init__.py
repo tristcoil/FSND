@@ -251,31 +251,6 @@ def create_app(test_config=None):
   Try using the word "title" to start.
   '''
   # actually implemeted in the above function, since both are POST calls
-  #NOTES: /questions     POST     payload comes with searchTerm
-  #expects:
-  #success
-  #questions
-  #total_questions
-  #current_category
-  #@app.route("/questions", methods=["POST"])
-  #def search_questions():
-  #    body = request.get_json()
-  #
-  #    search = body.get("searchTerm", None)
-  #
-  #    if search:
-  #        selection = Question.query.order_by(Question.id).filter(
-  #        Question.question.ilike("%{}%".format(search))
-  #        ).all()
-  #
-  #        current_questions = paginate_questions(request, selection)
-  #        return jsonify(
-  #                       {"success": True,
-  #                        "questions": current_questions,
-  #                        "total_questions": len(selection),
-  #                        "current_category": 1
-  #                       }
-  #        )
 
 
 
@@ -325,170 +300,101 @@ def create_app(test_config=None):
   '''
   @app.route("/quizzes", methods=["POST"])
   def play_quiz():
-  # expects POST method
-  # incoming POST paiload is
-  # 'previous_questions'   []   list of questions, maybe their IDs
-  # 'quiz_category'  {"id": 1, "type": "Science"}
-  # when all categories:
-  # 'quiz_category'  {"id": 0, "type": "click"}
+      # expects POST method
+      # incoming POST paiload is
+      # 'previous_questions'   []   list of questions, maybe their IDs
+      # 'quiz_category'  {"id": 1, "type": "Science"}
+      # when all categories:
+      # 'quiz_category'  {"id": 0, "type": "click"}
 
-  # GUI has variable currentQuestion - it is dictionary, gets it as result.question
-  # it gives us question.id from the database
-  # so we need to check if our proposed question, has that id
+      # GUI has variable currentQuestion - it is dictionary, gets it as result.question
+      # it gives us question.id from the database
+      # so we need to check if our proposed question, has that id
 
-      body = request.get_json()
+      try:
+          body = request.get_json()
 
-      previous_questions   = body.get("previous_questions")
-      quiz_category        = body.get("quiz_category")
-      category_id          = quiz_category["id"]
-      #new_category   = body.get("category", None)
-      #new_difficulty = body.get("difficulty", None)
-      #search         = body.get("searchTerm", None)
-
-      print('previous_questions: ', previous_questions)
-      print('quiz_category: ', quiz_category)
-      print('category_id: ', category_id)
-
-
-      selection = Question.query.filter(Question.category == category_id).all()
-      questions = [question.format() for question in selection]
-      #quiz_question = questions[1]
-
-      import random
-      num = random.randint(0, 10) # it is inclusive - generates integers 0 to 10
-      # questions is a list, well, it has to be random,
-      # so not from the start of the list
-
-      #for q in questions:
-      #    if q["id"] in previous_questions:
-      #        print('question id already used')
-      #    else:
-      #        quiz_question = q
-      #        break
-
-      found = False
-
-      while found==False:
-          q = random.randint(0, len(questions))
+          previous_questions   = body.get("previous_questions")
+          quiz_category        = body.get("quiz_category")
+          category_id          = quiz_category["id"]
 
           print('previous_questions: ', previous_questions)
-          print('q: ', q)
-          if q in previous_questions:
-              print('question id already used')
+          print('quiz_category: ', quiz_category)
+          print('category_id: ', category_id)
+
+          if category_id == 0:
+              selection = Question.query.all()
+              questions = [question.format() for question in selection]
           else:
-              quiz_question = questions[q]
-              print('quiz_question: ', quiz_question)
-              found=True
-              #break
+              selection = Question.query.filter(Question.category == category_id).all()
+              questions = [question.format() for question in selection]
+      except:
+          abort(500)
 
-
-
-
-
-
-
-      if len(quiz_question) == 0:
-          abort(404)
+      # ran out of questions for quiz
+      if len(previous_questions) >= len(questions):
+          abort(404) # abort counts as error
 
 
       try:
-          # we should return some random question in response payload
-          # the question reply payload is a dictionary containing question, category ...
+          # quiz_question = questions[1] # second element from the list
+          # num = random.randint(0, 10) # is inclusive - generates integers 0 to 10
+          # questions is a list, well, it has to be random,
+          # so not from the start of the list
 
-#          return jsonify({
-#                          "success": True,
-#                          "question": {"question": "ppppppp",
-#                                       "answer": "ooooooo",
-#                                       "id": 4,
-#                                       "difficulty": 2,
-#                                       "category": 3
-#                          }
-#                        })
+          #for q in questions:
+          #    if q["id"] in previous_questions:
+          #        print('question id already used')
+          #    else:
+          #        quiz_question = q
+          #        break
+
+          found = False
+          # compare lengths to prevent infinite loop when you run out of questions
+          while found == False and len(previous_questions) < len(questions):
+              for q in questions:
+                  if q["id"] in previous_questions:
+                      print('question id already used')
+                  else:
+                      quiz_question = q
+                      found=True
+                      if len(previous_questions) >= len(questions):
+                          abort(404)
+                      break
+
+              #q = random.randint(0, len(questions))
+
+              #print('previous_questions: ', previous_questions)
+              #print('q: ', q)
+
+              #if q in previous_questions:
+              #    print('question id already used')
+              #else:
+              #    quiz_question = questions[q]
+              #    print('quiz_question: ', quiz_question)
+              #    found = True
+              #    #break
+
+          if len(quiz_question) == 0:
+              abort(404)
+
+          # we should return some random question in response payload
+          # the question reply payload is a dictionary containing question, category, id ...
+          #return jsonify({"success": True,
+          #                "question": {"question": "ppppppp",
+          #                             "answer": "ooooooo",
+          #                             "id": 4,
+          #                             "difficulty": 2,
+          #                             "category": 3
+          #                            }
+          #              })
 
           return jsonify({
                           "success": True,
                           "question": quiz_question
                         })
-
-
-
-
-
-
       except:
-          #abort(422)
           abort(500)
-
-
-
-
-
-
-
-
-
-
-
-#  @app.route("/questions", methods=["POST"])
-#  def create_question():
-#      body = request.get_json()
-#
-#      new_question   = body.get("question", None)
-#      new_answer     = body.get("answer", None)
-#      new_category   = body.get("category", None)
-#      new_difficulty = body.get("difficulty", None)
-#      search         = body.get("searchTerm", None)
-#
-#      try:
-#          if search:
-#              selection = Question.query.order_by(Question.id).filter(
-#                          Question.question.ilike("%{}%".format(search))
-#                          ).all()
-#
-#              current_questions = paginate_questions(request, selection)
-#
-#              # do we need current category in response?, will keep it there as None
-#              return jsonify(
-#                         {"success": True,
-#                          "questions": current_questions,
-#                          "total_questions": len(selection),
-#                          "current_category": None
-#                         }
-#              )
-#
-#          else:
-#              question = Question(question=new_question, answer=new_answer, category=new_category, difficulty=new_difficulty)
-#              question.insert()
-#
-#              # include the newly added question in response
-#              selection = Question.query.order_by(Question.id).all()
-#              current_questions = paginate_questions(request, selection)
-#
-#              # returns also paginated view eventually
-#              return jsonify({"success": True,
-#                              "created": question.id,
-#                              "questions": current_questions,
-#                              "total_questions": len(Question.query.all())
-#                            })
-#
-#      except:
-#          abort(422)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   '''
   @TODO: COMPLETE
@@ -523,5 +429,11 @@ def create_app(test_config=None):
           405
       )
 
+  @app.errorhandler(500)
+  def server_error(error):
+      return (
+          jsonify({"success": False, "error": 500, "message": "server error"}),
+          500
+      )
 
   return app

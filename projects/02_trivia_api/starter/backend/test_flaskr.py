@@ -18,8 +18,14 @@ class TriviaTestCase(unittest.TestCase):
         self.database_path = "postgres://{}:{}@{}/{}".format("student", "student", 'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
-        # payload for new question creation
+        # payload for new question creation and quiz request
         self.new_question = {"question": "What is your favourite actor.", "answer": "Tom Hanks", "difficulty": 1, "category": 1}
+        self.quiz_request = {"previous_questions": [],
+                             "quiz_category": {
+                                               "id": 1,
+                                               "type": "Science"
+                                              }
+                            }
 
         # binds the app to the current context
         with self.app.app_context():
@@ -114,6 +120,23 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "unprocessable")
+
+    def test_quiz_response(self):
+        res = self.client().post("/quizzes", json=self.quiz_request)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["question"])
+
+
+    def test_500_quiz_server_fault(self):
+        res = self.client().post("/quizzes")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 500)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "server error")
 
 
 # Make the tests conveniently executable
