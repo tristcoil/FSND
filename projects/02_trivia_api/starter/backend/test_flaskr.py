@@ -65,6 +65,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(question.format()["difficulty"], 1)
 
     def test_400_for_failed_update(self):
+        # no payload, hence update fails
         res = self.client().patch("/questions/5")
         data = json.loads(res.data)
 
@@ -82,19 +83,32 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data["questions"]))
 
     def test_405_if_question_creation_not_allowed(self):
-        res = self.client().post("/questions/1000", json=self.new_book)
+        res = self.client().post("/questions/1000", json=self.new_question)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "method not allowed")
 
-    # delete different question every time we call this function
+    # delete question 11 that is by default in trivia_test database
     def test_delete_question(self):
-        # to be done
+        # delete specific element from database
+        res = self.client().delete("/questions/11")
+        data = json.loads(res.data)
+
+        # now we should get 'None' since that question is deleted
+        question = Question.query.filter(Question.id == 11).one_or_none()
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual(data["deleted"], 11)
+        self.assertTrue(data["total_questions"])
+        self.assertTrue(len(data["questions"]))
+        self.assertEqual(question, None)
+
 
     def test_422_if_question_does_not_exist(self):
-        res = self.client()delete("/questions/1000")
+        res = self.client().delete("/questions/1000")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
