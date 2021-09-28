@@ -16,10 +16,12 @@ setup_db(app)
 
 
 def setup_db(app):
+    print('setting up db ...')
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
+
 
 
 '''
@@ -39,8 +41,10 @@ def db_drop_and_create_all():
         recipe='[{"name": "water", "color": "blue", "parts": 1}]'
     )
 
-
-drink.insert()
+    drink.insert()
+    
+    
+    
 # ROUTES
 
 '''
@@ -50,6 +54,10 @@ a persistent drink entity, extends the base SQLAlchemy Model
 
 
 class Drink(db.Model):
+
+    # had to add table name, original repo was missing table directive
+    __tablename__ = 'drink'
+    
     # Autoincrementing, unique primary key
     id = Column(Integer().with_variant(Integer, "sqlite"), primary_key=True)
     # String Title

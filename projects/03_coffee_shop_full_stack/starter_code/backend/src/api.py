@@ -7,6 +7,17 @@ from flask_cors import CORS
 from .database.models import db_drop_and_create_all, setup_db, Drink
 from .auth.auth import AuthError, requires_auth
 
+
+
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+
+
 app = Flask(__name__)
 setup_db(app)
 CORS(app)
@@ -17,9 +28,59 @@ CORS(app)
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this funciton will add one
 '''
-# db_drop_and_create_all()
+db_drop_and_create_all()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # ROUTES
+
+
+
+
+# delete this later, it has to be in different part of script
+@app.route('/headers')
+#@requires_auth('get:drinks-detail')  # should work for Barista, Manager
+@requires_auth()  # should work for Barista, Manager
+def headers(payload):
+    print(payload)
+    return 'Access Granted'
+
+
+
+
+
 '''
 @TODO implement endpoint
     GET /drinks
@@ -28,6 +89,36 @@ CORS(app)
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks')
+@requires_auth()
+def drinks(payload):
+    selection = Drink.query.order_by(Drink.id).all()
+    
+    if selection is None:
+        abort(404)    
+    
+    drinks = [drink for drink in selection]
+    if len(drinks) == 0:
+        abort(404)
+
+
+
+    return jsonify({"success": True,
+                    "drinks": drinks
+                  })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 '''

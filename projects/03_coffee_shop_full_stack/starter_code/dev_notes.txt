@@ -1,0 +1,45 @@
+
+
+
+Coffee shop full stack:
+
+
+to fix werkzeug error
+TypeError: required field "type_ignores" missing from Module
+https://stackoverflow.com/questions/60140174/basic-flask-app-not-running-typeerror-required-field-type-ignores-missing-fr
+
+
+
+list tables in sqlite database
+https://stackoverflow.com/questions/82875/how-can-i-list-the-tables-in-a-sqlite-database-file-that-was-opened-with-attach
+
+
+database is empty, cannot connect to sqlite database
+https://knowledge.udacity.com/questions/303443
+https://knowledge.udacity.com/questions/677940
+
+
+this fixed the database creation issue - updated sqlalchemy packages
+https://knowledge.udacity.com/questions/691997
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

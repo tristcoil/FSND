@@ -15,3 +15,62 @@ createdb fyuur
 
 # TODO IMPLEMENT DATABASE URL
 SQLALCHEMY_DATABASE_URI = 'postgresql://coil:tristania@localhost:5432/fyuur'
+
+
+
+
+
+
+
+-----------------------------------------------------
+so reg the database migrations during development
+
+coil@coil-VM:~/Desktop/todoapp$ flask db init
+
+
+dropdb todoapp
+service postgresql restart
+createdb todoapp
+flask db migrate
+flask db upgrade
+
+coil@coil-VM:~/Desktop/todoapp$ flask db migrate
+/home/coil/.local/lib/python3.9/site-packages/flask_sqlalchemy/__init__.py:872: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future.  Set it to True or False to suppress this warning.
+  warnings.warn(FSADeprecationWarning(
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.autogenerate.compare] Detected added table 'todos'
+  Generating /home/coil/Desktop/todoapp/migrations/versions/81b1b582277a_.py ...  done
+coil@coil-VM:~/Desktop/todoapp$ 
+
+
+flask db upgrade   # so new tables appear, migration is not enough
+
+
+flask db downgrade
+
+
+
+works best on empty databases, when you already have data, you will need to update the auto generated migration scripts
+
+-----------------------------------------------------
+check the database tables:
+
+coil@coil-VM:~/Desktop/FSND/projects/01_fyyur/starter_code$ psql fyuur
+psql (13.3 (Ubuntu 13.3-0ubuntu0.21.04.1))
+Type "help" for help.
+
+fyuur=# \dt
+            List of relations
+ Schema |      Name       | Type  | Owner 
+--------+-----------------+-------+-------
+ public | Artist          | table | coil
+ public | Show            | table | coil
+ public | Venue           | table | coil
+ public | alembic_version | table | coil
+(4 rows)
+
+fyuur=#
+
+
+
