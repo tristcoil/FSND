@@ -83,3 +83,17 @@ There are `@TODO` comments throughout the `./backend/src`. We recommend tackling
 
 1. `./src/auth/auth.py`
 2. `./src/api.py`
+
+
+
+# sources:
+for recipe json errors:
+- https://stackoverflow.com/questions/39491420/python-jsonexpecting-property-name-enclosed-in-double-quotes
+- https://newbedev.com/python-requests-json-returns-single-quote
+- https://stackoverflow.com/questions/33418874/python-requests-json-returns-single-quote
+
+
+
+
+
+

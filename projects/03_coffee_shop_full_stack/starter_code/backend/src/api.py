@@ -129,12 +129,30 @@ def drinks_detail(payload):
 '''
 # NOTE: payload info from frontend is in drink-form.component.ts file in frontend dir src/app/pages/drink-menu/drink-form
 @app.route('/drinks', methods=["POST"])
-@requires_auth('post:drinks')
-def post_drink(payload):
+###@requires_auth('post:drinks')
+def post_drink():
     body = request.get_json()
+    
+    
+    print('---body---: ', body)
     
     req_title  = body.get("title", None) 
     req_recipe = body.get("recipe", None)
+    
+    req_recipe = json.dumps(req_recipe)
+    print('---req_recipe---: ', req_recipe)
+    
+    
+    # req_recipe is list and has one dictionary in it
+    #req_recipe = str(req_recipe)
+    #print('---str req_recipe---: ', req_recipe)
+
+    # has to look like
+    # '[{"name": "vodka", "color": "blue", "parts": 1}]'
+    # but looked like
+    # '[{'name': 'vodka', 'color': 'blue', 'parts': 1}]'
+    # json needs double quotes, so we used json dump string to fix it
+
 
     #try:    
     drink = Drink(title=req_title, recipe=req_recipe)
@@ -142,7 +160,7 @@ def post_drink(payload):
 
     # we have to return array with one dictionary
     return jsonify({"success": True,
-                    "drinks": list(drink.long())
+                    "drinks": drink.long()
                   })     
 
     #except:
@@ -175,7 +193,7 @@ def patch_drink(drink_id):
     if "title" in body:
         drink.title = body.get("title", None)
     if "title" in body:
-        drink.recipe = body.get("recipe", None)            
+        drink.recipe = json.dumps(body.get("recipe", None))            
     
     drink.update()
     
@@ -202,7 +220,7 @@ def patch_drink(drink_id):
 '''
 @app.route("/drinks/<int:drink_id>", methods=["DELETE"])
 @requires_auth('delete:drinks')
-def patch_drink(drink_id):
+def delete_drink(drink_id):
     body = request.get_json()
     
     drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
@@ -268,7 +286,7 @@ def server_error(error):
     return jsonify({
         "success": False,
         "error": 500,
-        "message": "resource not found"
+        "message": "server error"
     }), 500
 
 
