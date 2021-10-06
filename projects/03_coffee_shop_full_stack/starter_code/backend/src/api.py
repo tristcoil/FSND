@@ -67,7 +67,7 @@ def headers(payload):
 '''
 @app.route('/drinks', methods=["GET"])
 @requires_auth()
-def drinks(payload):
+def drinks():
     selection = Drink.query.order_by(Drink.id).all()
     
     if selection is None:
@@ -104,13 +104,21 @@ def drinks_detail(payload):
     if selection is None:
         abort(404)
         
-    drinks = [drink.long() for drink in selection]
+    #drinks = [drink.long() for drink in selection]
+    drinks = [drink for drink in selection]
+    drinks = [drink.long() for drink in drinks]
+    
     if len(drinks) == 0:
         abort(404)
+        
+    #print('---drinks[0].long()---', drinks[0].long())    
+        
+        
         
         
     return jsonify({"success": True,
                     "drinks": drinks
+                    #"drinks": [drinks[0].long(),drinks[5].long(), drinks[6].long()]
                   })        
 
 
@@ -182,7 +190,12 @@ def post_drink():
 '''
 @app.route("/drinks/<int:drink_id>", methods=["PATCH"])
 @requires_auth('patch:drinks')
-def patch_drink(drink_id):
+#def patch_drink(drink_id):
+def patch_drink(payload, drink_id):
+    # we had to use 2 arguments above, otherwise it was mixing payload with drink_id together
+
+    print('---drink_id---', drink_id)
+
     body = request.get_json()
     
     drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
@@ -192,7 +205,7 @@ def patch_drink(drink_id):
     #try:    
     if "title" in body:
         drink.title = body.get("title", None)
-    if "title" in body:
+    if "recipe" in body:
         drink.recipe = json.dumps(body.get("recipe", None))            
     
     drink.update()
@@ -220,7 +233,7 @@ def patch_drink(drink_id):
 '''
 @app.route("/drinks/<int:drink_id>", methods=["DELETE"])
 @requires_auth('delete:drinks')
-def delete_drink(drink_id):
+def delete_drink(payload, drink_id):
     body = request.get_json()
     
     drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
@@ -230,12 +243,6 @@ def delete_drink(drink_id):
     drink.delete()    
           
     #try:    
-    if "title" in body:
-        drink.title = body.get("title", None)
-    if "title" in body:
-        drink.recipe = body.get("recipe", None)            
-    
-    drink.update()
     
     # we have to return array with one dictionary
     return jsonify({"success": True,

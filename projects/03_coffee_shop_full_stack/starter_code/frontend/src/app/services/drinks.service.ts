@@ -46,7 +46,7 @@ export class DrinksService {
 
   //                                   {
   //                                     name: 'milk',
-  //                                     color: 'grey',
+  //                                    color: 'grey',
   //                                     parts: 3
   //                                   },
   //                                   {
@@ -62,7 +62,7 @@ export class DrinksService {
   //                             recipe: [
   //                                   {
   //                                     name: 'foam',
-  //                                     color: 'white',
+  //                                    color: 'white',
   //                                     parts: 1
   //                                   },
   //                                   {
