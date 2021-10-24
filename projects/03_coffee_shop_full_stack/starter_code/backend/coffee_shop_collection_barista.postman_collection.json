@@ -1,0 +1,154 @@
+{
+	"info": {
+		"_postman_id": "f42d0f05-3792-4c27-9ea7-68998f5e903c",
+		"name": "coffee_shop_collection_barista",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET_drinks_public",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/drinks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"drinks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET_drinks_detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/drinks-detail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"drinks-detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST_new_drink",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"x_vodka\",\n    \"recipe\": [\n        {\n            \"name\": \"vodka\",\n            \"color\": \"blue\",\n            \"parts\": 1\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/drinks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"drinks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_drink_id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"zzz_vodka\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/drinks/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"drinks",
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE_drink_id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/drinks/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"drinks",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFtVXQ3UG1wbFJ0NkZQQm1WN1Z0dSJ9.eyJpc3MiOiJodHRwczovL2Rldi1tamhiYmE2YS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjExNDFjNDQ1NGUwMzIwMDY5MWU1ZDY0IiwiYXVkIjoibXlhcGkiLCJpYXQiOjE2MzUwODE3ODQsImV4cCI6MTYzNTE2ODE4NCwiYXpwIjoiakpoY1F1NHdzMVlYQkFDTnhGUGdsQkoyS3pJU2IxMnciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDpkcmlua3MtZGV0YWlsIl19.WyL-WY5Us6r5CH3b8DswUqM6eZSrjiXPZCBSGnS2HcspcQ0ufiQx6VMHIIQ5J6f8kyGkJNbincsEpne-Btjs5eeT0LlQTT0p86WAJLfjVQlM1W6UvOdMbvRqj3eM1O3OrG7av_oOZPTbOTL6OMbVeQVqUAZMbwobYAxB2RmO3W5xhKZE_fWH-xLkc0FyxBy2fctvFNWqqcfT3S58eFz5pJpVNqgfYm7Jcusy3EZpiy1zrEDqfO9YRDQ_V9Fbz4d_9660qHz0jdx-k7QNAFx6YV_WiUXch9FAA4HmO9unUkQ_4uD3t7vSmTfyZ228omsDZ7HkPpBnbzL_iajeN2Qwgg",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

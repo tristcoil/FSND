@@ -87,13 +87,33 @@ There are `@TODO` comments throughout the `./backend/src`. We recommend tackling
 
 
 # sources:
+general info from main Udacity repo (mainly from BasicFlaskAuth repo):
+- https://github.com/udacity/FSND 
+
 for recipe json errors:
 - https://stackoverflow.com/questions/39491420/python-jsonexpecting-property-name-enclosed-in-double-quotes
 - https://newbedev.com/python-requests-json-returns-single-quote
 - https://stackoverflow.com/questions/33418874/python-requests-json-returns-single-quote
 
+http statuses
+- https://www.restapitutorial.com/httpstatuscodes.html
 
+- dictionary into list
+https://www.kite.com/python/answers/how-to-convert-a-dictionary-to-a-numpy-array-in-python
 
+to fix werkzeug error
+TypeError: required field "type_ignores" missing from Module
+- https://stackoverflow.com/questions/60140174/basic-flask-app-not-running-typeerror-required-field-type-ignores-missing-fr
 
+list tables in sqlite database
+- https://stackoverflow.com/questions/82875/how-can-i-list-the-tables-in-a-sqlite-database-file-that-was-opened-with-attach
 
+database is empty, cannot connect to sqlite database
+- https://knowledge.udacity.com/questions/303443
+- https://knowledge.udacity.com/questions/677940
 
+this fixed the database creation issue - updated sqlalchemy packages
+- https://knowledge.udacity.com/questions/691997
+
+postman collections:
+- https://knowledge.udacity.com/questions/704215

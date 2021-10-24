@@ -5,6 +5,16 @@ Authorize link:
 https://dev-mjhbba6a.us.auth0.com/authorize?audience=myapi&response_type=token&client_id=jJhcQu4ws1YXBACNxFPglBJ2KzISb12w&redirect_uri=http://localhost:5000/headers
 
 
+url: dev-mjhbba6a.us.auth0.com
+audience: myapi
+clientId: jJhcQu4ws1YXBACNxFPglBJ2KzISb12w
+callbackURL: http://localhost:8100
+
+
+
+
+
+
 dummy user
 michal.vasulka@gmail.com
 Udacitypassword123

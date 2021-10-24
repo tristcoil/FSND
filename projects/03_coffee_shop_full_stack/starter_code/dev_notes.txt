@@ -23,6 +23,10 @@ this fixed the database creation issue - updated sqlalchemy packages
 https://knowledge.udacity.com/questions/691997
 
 
+postman collections:
+https://knowledge.udacity.com/questions/704215
+
+
 
 
 

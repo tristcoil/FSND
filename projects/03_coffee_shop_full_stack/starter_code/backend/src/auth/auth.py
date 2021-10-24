@@ -170,7 +170,8 @@ def verify_decode_jwt(token):
 
     if rsa_key:
         try:
-            payload = jwt.decode( token, rsa_key,
+            payload = jwt.decode( token, 
+                                  rsa_key,
                                   algorithms=ALGORITHMS,
                                   audience=API_AUDIENCE,
                                   issuer='https://' + AUTH0_DOMAIN + '/'
@@ -195,12 +196,6 @@ def verify_decode_jwt(token):
         raise AuthError({'code': 'invalid_header',
                          'description': 'RSA key not found'},
                          400)
-
-
-
-
-
-
 
 
 
@@ -235,23 +230,7 @@ def requires_auth(permission=''):
         return wrapper
     return requires_auth_decorator        
 
-
-    
-#def requires_auth(f):
-#    @wraps(f)
-#    def wrapper(*args, **kwargs):
-#        token = get_token_auth_header()
-#        try:
-#            payload = verify_decode_jwt(token)
-#        except:
-#            abort(401)
-#        return f(payload, *args, **kwargs)
-#    
-#    return wrapper            
-    
-    
-    
-    
+ 
     
 # -------------------    
 

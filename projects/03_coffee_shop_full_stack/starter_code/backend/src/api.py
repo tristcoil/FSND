@@ -33,19 +33,12 @@ CORS(app)
 
 
 
+# ---------------------- API ROUTES --------------------------------
 
 
 
 
-
-
-
-# ROUTES
-
-
-
-
-# delete this later, it has to be in different part of script
+# just testing endpoint
 @app.route('/headers')
 #@requires_auth('get:drinks-detail')  # should work for Barista, Manager
 @requires_auth()  # should work for Barista, Manager
@@ -66,24 +59,22 @@ def headers(payload):
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=["GET"])
-@requires_auth()
-def drinks():
+@requires_auth()  # public endpoint, no required auth role in parameter
+def drinks(payload):
+
     selection = Drink.query.order_by(Drink.id).all()
-    
     if selection is None:
         abort(404)    
     
-    drinks = [drink.short() for drink in selection]
-    if len(drinks) == 0:
-        abort(404)
+    try:
+        drinks = [drink.short() for drink in selection]
 
+        return jsonify({"success": True,
+                        "drinks": drinks
+                      })
 
-
-    return jsonify({"success": True,
-                    "drinks": drinks
-                  })
-
-
+    except:
+        abort(500)
 
 
 
@@ -99,31 +90,26 @@ def drinks():
 @app.route('/drinks-detail', methods=["GET"])
 @requires_auth('get:drinks-detail')
 def drinks_detail(payload):
+
     selection = Drink.query.order_by(Drink.id).all()
     
     if selection is None:
         abort(404)
-        
-    #drinks = [drink.long() for drink in selection]
-    drinks = [drink for drink in selection]
-    drinks = [drink.long() for drink in drinks]
-    
-    if len(drinks) == 0:
-        abort(404)
-        
-    #print('---drinks[0].long()---', drinks[0].long())    
-        
-        
-        
-        
-    return jsonify({"success": True,
-                    "drinks": drinks
-                    #"drinks": [drinks[0].long(),drinks[5].long(), drinks[6].long()]
-                  })        
+      
+    try:    
+        #drinks = [drink.long() for drink in selection]
+        drinks = [drink for drink in selection]
+        drinks = [drink.long() for drink in drinks]
 
+        #print('---drinks[0].long()---', drinks[0].long())    
+          
+        return jsonify({"success": True,
+                        "drinks": drinks
+                        #"drinks": [drinks[0].long(),drinks[5].long(), drinks[6].long()]
+                      })        
 
-
-
+    except:
+        abort(500)
 
 
 '''
@@ -137,43 +123,39 @@ def drinks_detail(payload):
 '''
 # NOTE: payload info from frontend is in drink-form.component.ts file in frontend dir src/app/pages/drink-menu/drink-form
 @app.route('/drinks', methods=["POST"])
-###@requires_auth('post:drinks')
-def post_drink():
-    body = request.get_json()
+@requires_auth('post:drinks')
+def post_drink(payload):
     
+    try:
+        body = request.get_json()
+        print('---body---: ', body)
     
-    print('---body---: ', body)
+        req_title  = body.get("title", None) 
+        req_recipe = body.get("recipe", None)
+        
+        req_recipe = json.dumps(req_recipe)
+        print('---req_recipe---: ', req_recipe)
     
-    req_title  = body.get("title", None) 
-    req_recipe = body.get("recipe", None)
+        # req_recipe is list and has one dictionary in it
+        # req_recipe = str(req_recipe)
+        # print('---str req_recipe---: ', req_recipe)
+
+        # has to look like
+        # '[{"name": "vodka", "color": "blue", "parts": 1}]'
+        # but looked like
+        # '[{'name': 'vodka', 'color': 'blue', 'parts': 1}]'
+        # json needs double quotes, so we used json dump string to fix it
     
-    req_recipe = json.dumps(req_recipe)
-    print('---req_recipe---: ', req_recipe)
-    
-    
-    # req_recipe is list and has one dictionary in it
-    #req_recipe = str(req_recipe)
-    #print('---str req_recipe---: ', req_recipe)
+        drink = Drink(title=req_title, recipe=req_recipe)
+        drink.insert()
 
-    # has to look like
-    # '[{"name": "vodka", "color": "blue", "parts": 1}]'
-    # but looked like
-    # '[{'name': 'vodka', 'color': 'blue', 'parts': 1}]'
-    # json needs double quotes, so we used json dump string to fix it
+        # we have to return array with one dictionary
+        return jsonify({"success": True,
+                        "drinks": drink.long()
+                      })     
 
-
-    #try:    
-    drink = Drink(title=req_title, recipe=req_recipe)
-    drink.insert()
-
-    # we have to return array with one dictionary
-    return jsonify({"success": True,
-                    "drinks": drink.long()
-                  })     
-
-    #except:
-
-
+    except:
+        abort(500)
 
 
 
@@ -193,30 +175,38 @@ def post_drink():
 #def patch_drink(drink_id):
 def patch_drink(payload, drink_id):
     # we had to use 2 arguments above, otherwise it was mixing payload with drink_id together
+    # based on the model var, args, kwargs, so likely it inherits this order
 
+    
     print('---drink_id---', drink_id)
-
     body = request.get_json()
     
     drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
     if drink is None:
         abort(404)
-          
-    #try:    
-    if "title" in body:
-        drink.title = body.get("title", None)
-    if "recipe" in body:
-        drink.recipe = json.dumps(body.get("recipe", None))            
+        
+    try:           
+        if "title" in body:
+            drink.title = body.get("title", None)
+        if "recipe" in body:
+            drink.recipe = json.dumps(body.get("recipe", None))            
     
-    drink.update()
+        drink.update()
     
-    # we have to return array with one dictionary
-    return jsonify({"success": True,
-                    "drinks": list(drink.long())
-                  })     
+        # we can get list from dict by calling .items() in dict and then calling list on it
+        one_drink_lst = list( drink.long().items() )
+        print('one_drink_lst: ', one_drink_lst)
+    
+    
+    
+        # we have to return array with one dictionary
+        return jsonify({"success": True,
+                        "drinks": one_drink_lst
+                        #"drinks": drink.long()
+                      })     
 
-    #except:
-
+    except:
+        abort(500)
 
 
 
@@ -234,24 +224,26 @@ def patch_drink(payload, drink_id):
 @app.route("/drinks/<int:drink_id>", methods=["DELETE"])
 @requires_auth('delete:drinks')
 def delete_drink(payload, drink_id):
+    
+    print('drink_id: ', drink_id)
     body = request.get_json()
     
     drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
+        
     if drink is None:
         abort(404)
         
-    drink.delete()    
-          
-    #try:    
-    
-    # we have to return array with one dictionary
-    return jsonify({"success": True,
-                    "delete": drink_id
-                  })     
+    try:    
+        drink.delete()    
+              
+        # we have to return array with one dictionary
+        return jsonify({"success": True,
+                        "delete": drink_id
+                      })     
 
-    #except:
-
-
+    except Exception as e:
+        print('ERROR: ', str(e))
+        abort(500)
 
 
 
@@ -285,7 +277,7 @@ def bad_request(error):
     return jsonify({
         "success": False,
         "error": 400,
-        "message": "resource not found"
+        "message": "bad request"
     }), 400
 
 @app.errorhandler(500)
@@ -295,9 +287,6 @@ def server_error(error):
         "error": 500,
         "message": "server error"
     }), 500
-
-
-
 
 
 
@@ -312,12 +301,6 @@ def not_found(error):
         "error": 404,
         "message": "resource not found"
     }), 404
-
-
-
-
-
-
 
 
 
