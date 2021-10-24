@@ -12,6 +12,14 @@ QuizView:
 url: `/categories`, //TODO: update request URL
 url: '/quizzes', //TODO: update request URL
 
-
+// No need to update frontend endpoints, backednd was designed according to frontend code
+//GET    '/categories'                                   
+//GET    '/questions'                                    
+//PATCH  '/questions/<int:question_id>'                  
+//DELETE '/questions/<int:question_id>'                  
+//POST   '/questions' # posts new question               
+//POST   '/questions' # searches questions               
+//GET    '/categories/<int:category_id>/questions'       
+//POST   '/quizzes'
 
 

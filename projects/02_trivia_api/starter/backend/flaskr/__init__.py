@@ -52,7 +52,7 @@ def create_app(test_config=None):
   Create an endpoint to handle GET requests
   for all available categories.
   '''
-  @app.route("/categories")
+  @app.route("/categories", methods=["GET"])
   def retrieve_categories():
       category_selection = Category.query.order_by(Category.id).all()
 
@@ -95,7 +95,7 @@ def create_app(test_config=None):
   ten questions per page and pagination at the bottom of the screen for three pages.
   Clicking on the page numbers should update the questions.
   '''
-  @app.route("/questions")
+  @app.route("/questions", methods=["GET"])
   def retrieve_questions():
       selection = Question.query.order_by(Question.id).all()
       current_questions = paginate_questions(request, selection)
@@ -193,7 +193,7 @@ def create_app(test_config=None):
   '''
   # there are 2 POST calls to /questions, so we need to decide based on payload contents
 
-  @app.route("/questions", methods=["POST"])
+  @app.route("/questions", methods=["POST", "PUT"])
   def create_question():
       body = request.get_json()
 
@@ -263,7 +263,7 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that
   category to be shown.
   '''
-  @app.route("/categories/<int:category_id>/questions")
+  @app.route("/categories/<int:category_id>/questions", methods=["GET"])
   def get_questions_by_category(category_id):
 
       try:
@@ -288,7 +288,7 @@ def create_app(test_config=None):
 
 
   '''
-  @TODO:   NO IDEA HOW TO PROGRAM IT
+  @TODO:   
   Create a POST endpoint to get questions to play the quiz.
   This endpoint should take category and previous question parameters
   and return a random questions within the given category,

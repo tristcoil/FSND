@@ -6,6 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flaskr import create_app
 from models import setup_db, Question, Category
 
+from dotenv import load_dotenv
+
+
+# get vars from .env file
+load_dotenv()
+USERNAME      = os.getenv('TEST_USERNAME')
+PASSWORD      = os.getenv('TEST_PASSWORD')
+HOST_AND_PORT = os.getenv('TEST_HOST_AND_PORT')
+DATABASE_NAME = os.getenv('TEST_DATABASE_NAME')
+
+
 
 class TriviaTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -14,8 +25,11 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "trivia_test"
-        self.database_path = "postgres://{}:{}@{}/{}".format("student", "student", 'localhost:5432', self.database_name)
+        #self.database_name = ""
+        self.database_name = DATABASE_NAME
+
+        #self.database_path = "postgres://{}:{}@{}/{}".format("", "", ':', self.database_name)
+        self.database_path = "postgres://{}:{}@{}/{}".format(USERNAME, PASSWORD, HOST_AND_PORT, self.database_name)
         setup_db(self.app, self.database_path)
 
         # payload for new question creation and quiz request
@@ -87,6 +101,22 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(data["created"])
         self.assertTrue(len(data["questions"]))
+
+
+    def test_put_create_new_question(self):
+        res = self.client().put("/questions", json=self.new_question)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["created"])
+        self.assertTrue(len(data["questions"]))
+
+
+
+
+
+
 
     def test_405_if_question_creation_not_allowed(self):
         res = self.client().post("/questions/1000", json=self.new_question)
