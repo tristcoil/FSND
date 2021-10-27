@@ -238,7 +238,7 @@ def search_venues():
   count = venues.count()
   data = []
   
-  # !!!!!!!!!!!!!!!!! fix number of upcoming shows later, but frontend is not even reflecting that, so thats strange
+  # fix number of upcoming shows later, but frontend is not even reflecting that, so thats strange
   # maybe fix like this is enough
   
   for venue in venues:
@@ -643,7 +643,7 @@ def search_artists():
   data = []
   
   
-  # !!!!!!!!!!!!!!!!! fix number of upcoming shows later, but frontend is not even reflecting that, so thats strange, likely value not needed
+  # fix number of upcoming shows later, but frontend is not even reflecting that, so thats strange, likely value not needed
   # likely fixed now
   
   for artist in artists:

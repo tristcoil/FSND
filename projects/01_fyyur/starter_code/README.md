@@ -187,39 +187,48 @@ Navigate to project homepage [http://127.0.0.1:5000/](http://127.0.0.1:5000/) or
 
 ## Sources:
 
+general info from main Udacity repo:
+- https://github.com/udacity/FSND
+
+to fix werkzeug error TypeError: required field "type_ignores" missing from Module
+- https://stackoverflow.com/questions/60140174/basic-flask-app-not-running-typeerror-required-field-type-ignores-missing-fr
+
 select venues correctly
-https://knowledge.udacity.com/questions/624322
+- https://knowledge.udacity.com/questions/624322
 
 having genres as array
-https://knowledge.udacity.com/questions/652699
-https://knowledge.udacity.com/questions/650201     # getlist method helped
+- https://knowledge.udacity.com/questions/652699
+- https://knowledge.udacity.com/questions/650201     # getlist method helped
 
 example of foreign keys - for Shows
-https://knowledge.udacity.com/questions/653784
+- https://knowledge.udacity.com/questions/653784
 
 parent and child relations:
-https://knowledge.udacity.com/questions/654966
-https://knowledge.udacity.com/questions/510080#510112
-https://knowledge.udacity.com/questions/637391#637486
-https://knowledge.udacity.com/questions/510080#510112
+- https://knowledge.udacity.com/questions/654966
+- https://knowledge.udacity.com/questions/510080#510112
+- https://knowledge.udacity.com/questions/637391#637486
+- https://knowledge.udacity.com/questions/510080#510112
 
 how to populate venue by venue ID:
-https://knowledge.udacity.com/questions/622051
+- https://knowledge.udacity.com/questions/622051
 
-# for time comparisons
-https://stackoverflow.com/questions/19887353/attributeerror-str-object-has-no-attribute-strftime
+for time comparisons
+- https://stackoverflow.com/questions/19887353/attributeerror-str-object-has-no-attribute-strftime
 
-# how to list venues
-https://knowledge.udacity.com/questions/627816
+how to list venues
+- https://knowledge.udacity.com/questions/627816
 
-# list of SQL ORM queries
-https://video.udacity-data.com/topher/2019/August/5d5a52af_query-cheat-sheet/query-cheat-sheet.pdf
+list of SQL ORM queries
+- https://video.udacity-data.com/topher/2019/August/5d5a52af_query-cheat-sheet/query-cheat-sheet.pdf
 
-# edit database records
-https://knowledge.udacity.com/questions/470242
+edit database records
+- https://knowledge.udacity.com/questions/470242
 
-# aggregating shows based on venue nae
-https://knowledge.udacity.com/questions/258519
-https://knowledge.udacity.com/questions/484218
+aggregating shows based on venue name
+- https://knowledge.udacity.com/questions/258519
+- https://knowledge.udacity.com/questions/484218
 
-
+regarding database submision
+- https://knowledge.udacity.com/questions/363074
+- https://knowledge.udacity.com/questions/243317
+- https://knowledge.udacity.com/questions/628095
