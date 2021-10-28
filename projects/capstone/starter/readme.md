@@ -106,8 +106,8 @@ coil@coil-VM:~/Desktop$ curl -X DELETE http://127.0.0.1:5000/prices/1
 install dotenv library
 https://pypi.org/project/python-dotenv/
 
-
-
+bad json in tests
+https://stackoverflow.com/questions/16573332/jsondecodeerror-expecting-value-line-1-column-1-char-0
 
 
 

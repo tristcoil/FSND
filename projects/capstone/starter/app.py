@@ -5,33 +5,36 @@ from flask_cors import CORS
 
 from models import setup_db, Ticker, Data
 
+from dotenv import load_dotenv
 
 
 def create_app(test_config=None):
+  print('--- creating app ---')
   # create and configure the app
   app = Flask(__name__)
   setup_db(app)
   CORS(app)
 
-  return app
+  #####return app
 
 #APP = create_app()
-app = create_app()
+#app = create_app()
 
 
 # ---------- GET ----------
 
-@app.route("/public", methods=["GET"])
-def public_endpoint():
+  @app.route("/public", methods=["GET"])
+  def public_endpoint():
 
     return jsonify({
-                      "message": "public endpoint",
+                      "success": True,
+                      "message": "public endpoint"
                   })
 
 
 
-@app.route("/tickers", methods=["GET"])
-def retrieve_tickers():
+  @app.route("/tickers", methods=["GET"])
+  def retrieve_tickers():
     #try:
     selection = Ticker.query.order_by(Ticker.id).all()
     tickers = [ ticker.format() for ticker in selection ]
@@ -51,8 +54,8 @@ def retrieve_tickers():
 
 
 
-@app.route("/prices", methods=["GET"])
-def retrieve_prices():
+  @app.route("/prices", methods=["GET"])
+  def retrieve_prices():
     #try:
     selection = Data.query.order_by(Data.id).all()
     data_list = [ data.format() for data in selection ]
@@ -86,8 +89,8 @@ def retrieve_prices():
 
 # ---------- POST ----------
 
-@app.route("/tickers", methods=["POST"])
-def create_ticker():
+  @app.route("/tickers", methods=["POST"])
+  def create_ticker():
     body = request.get_json()
     
     symbol      = body.get("symbol", None)
@@ -112,8 +115,8 @@ def create_ticker():
 
 
 
-@app.route("/prices", methods=["POST"])
-def create_price():
+  @app.route("/prices", methods=["POST"])
+  def create_price():
     body = request.get_json()
     
     date         = body.get("date", None)
@@ -155,8 +158,8 @@ def create_price():
 
 # ---------- PATCH ----------
 
-@app.route("/tickers/<int:ticker_id>", methods=["PATCH"])
-def update_ticker(ticker_id):
+  @app.route("/tickers/<int:ticker_id>", methods=["PATCH"])
+  def update_ticker(ticker_id):
     body = request.get_json()
     
     
@@ -180,8 +183,8 @@ def update_ticker(ticker_id):
     
 
 
-@app.route("/prices/<int:price_id>", methods=["PATCH"])
-def update_price(price_id):
+  @app.route("/prices/<int:price_id>", methods=["PATCH"])
+  def update_price(price_id):
     body = request.get_json()
     
     
@@ -218,8 +221,8 @@ def update_price(price_id):
 
 # ---------- DELETE ----------
 
-@app.route("/tickers/<int:ticker_id>", methods=["DELETE"])
-def delete_ticker(ticker_id):
+  @app.route("/tickers/<int:ticker_id>", methods=["DELETE"])
+  def delete_ticker(ticker_id):
 
     ticker = Ticker.query.filter(Ticker.id == ticker_id).one_or_none()
     
@@ -244,8 +247,8 @@ def delete_ticker(ticker_id):
 
 
 
-@app.route("/prices/<int:price_id>", methods=["DELETE"])
-def delete_price(price_id):
+  @app.route("/prices/<int:price_id>", methods=["DELETE"])
+  def delete_price(price_id):
 
     data = Data.query.filter(Data.id == price_id).one_or_none()
     
@@ -275,44 +278,44 @@ def delete_price(price_id):
 
 
 # ---------- Error Handlers ------------ 
-@app.errorhandler(404)
-def not_found(error):
+  @app.errorhandler(404)
+  def not_found(error):
     return (
         jsonify({"success": False, "error": 404, "message": "resource not found"}),
         404
     )
 
-@app.errorhandler(422)
-def unprocessable(error):
+  @app.errorhandler(422)
+  def unprocessable(error):
     return (
         jsonify({"success": False, "error": 422, "message": "unprocessable"}),
         422
     )
     
-@app.errorhandler(400)
-def bad_request(error):
+  @app.errorhandler(400)
+  def bad_request(error):
     return (
         jsonify({"success": False, "error": 400, "message": "bad request"}),
         400
     )    
 
-@app.errorhandler(405)
-def method_not_allowed(error):
+  @app.errorhandler(405)
+  def method_not_allowed(error):
     return (
         jsonify({"success": False, "error": 405, "message": "method not allowed"}),
         405
     )
 
-@app.errorhandler(500)
-def server_error(error):
+  @app.errorhandler(500)
+  def server_error(error):
     return (
         jsonify({"success": False, "error": 500, "message": "server error"}),
         500
     )
 
 
+  return app
 
-
-if __name__ == '__main__':
-    #APP.run(host='0.0.0.0', port=8080, debug=True)
-    app.run(host='0.0.0.0', port=8080, debug=True)
+#if __name__ == '__main__':
+#    #APP.run(host='0.0.0.0', port=8080, debug=True)
+#    app.run(host='0.0.0.0', port=8080, debug=True)

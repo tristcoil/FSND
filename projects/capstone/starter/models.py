@@ -22,7 +22,7 @@ database_path = "sqlite:///{}".format(os.path.join(project_dir, DATABASE_FILENAM
 db = SQLAlchemy()
 
 
-def setup_db(app):
+def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
