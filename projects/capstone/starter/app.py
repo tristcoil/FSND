@@ -4,8 +4,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from models import setup_db, Ticker, Data
+from auth import AuthError, requires_auth
 
-from dotenv import load_dotenv
+
+#from dotenv import load_dotenv
+
+
+
+
+
 
 
 def create_app(test_config=None):
@@ -17,13 +24,13 @@ def create_app(test_config=None):
 
   #####return app
 
-#APP = create_app()
-#app = create_app()
+  #APP = create_app()
+  #app = create_app()
 
 
-# ---------- GET ----------
-
-  @app.route("/public", methods=["GET"])
+  # ---------- GET ----------
+  
+  @app.route("/headers", methods=["GET"])
   def public_endpoint():
 
     return jsonify({
@@ -34,7 +41,8 @@ def create_app(test_config=None):
 
 
   @app.route("/tickers", methods=["GET"])
-  def retrieve_tickers():
+  @requires_auth('get:tickers-prices')
+  def retrieve_tickers(payload):
     #try:
     selection = Ticker.query.order_by(Ticker.id).all()
     tickers = [ ticker.format() for ticker in selection ]
@@ -55,7 +63,8 @@ def create_app(test_config=None):
 
 
   @app.route("/prices", methods=["GET"])
-  def retrieve_prices():
+  @requires_auth('get:tickers-prices')
+  def retrieve_prices(payload):
     #try:
     selection = Data.query.order_by(Data.id).all()
     data_list = [ data.format() for data in selection ]
@@ -74,23 +83,11 @@ def create_app(test_config=None):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ---------- POST ----------
+  # ---------- POST ----------
 
   @app.route("/tickers", methods=["POST"])
-  def create_ticker():
+  @requires_auth('post:tickers-prices')
+  def create_ticker(payload):
     body = request.get_json()
     
     symbol      = body.get("symbol", None)
@@ -116,7 +113,8 @@ def create_app(test_config=None):
 
 
   @app.route("/prices", methods=["POST"])
-  def create_price():
+  @requires_auth('post:tickers-prices')
+  def create_price(payload):
     body = request.get_json()
     
     date         = body.get("date", None)
@@ -143,23 +141,11 @@ def create_app(test_config=None):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ---------- PATCH ----------
+  # ---------- PATCH ----------
 
   @app.route("/tickers/<int:ticker_id>", methods=["PATCH"])
-  def update_ticker(ticker_id):
+  @requires_auth('patch:tickers-prices')
+  def update_ticker(payload, ticker_id):
     body = request.get_json()
     
     
@@ -184,7 +170,8 @@ def create_app(test_config=None):
 
 
   @app.route("/prices/<int:price_id>", methods=["PATCH"])
-  def update_price(price_id):
+  @requires_auth('patch:tickers-prices')
+  def update_price(payload, price_id):
     body = request.get_json()
     
     
@@ -211,18 +198,11 @@ def create_app(test_config=None):
 
 
 
-
-
-
-
-
- 
-
-
-# ---------- DELETE ----------
+  # ---------- DELETE ----------
 
   @app.route("/tickers/<int:ticker_id>", methods=["DELETE"])
-  def delete_ticker(ticker_id):
+  @requires_auth('delete:tickers-prices')
+  def delete_ticker(payload, ticker_id):
 
     ticker = Ticker.query.filter(Ticker.id == ticker_id).one_or_none()
     
@@ -248,7 +228,8 @@ def create_app(test_config=None):
 
 
   @app.route("/prices/<int:price_id>", methods=["DELETE"])
-  def delete_price(price_id):
+  @requires_auth('delete:tickers-prices')
+  def delete_price(payload, price_id):
 
     data = Data.query.filter(Data.id == price_id).one_or_none()
     
@@ -277,7 +258,7 @@ def create_app(test_config=None):
 
 
 
-# ---------- Error Handlers ------------ 
+  # ---------- Error Handlers ------------ 
   @app.errorhandler(404)
   def not_found(error):
     return (
@@ -316,6 +297,12 @@ def create_app(test_config=None):
 
   return app
 
-#if __name__ == '__main__':
+
+
+app = create_app()
+
+if __name__ == '__main__':
 #    #APP.run(host='0.0.0.0', port=8080, debug=True)
 #    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run()
+

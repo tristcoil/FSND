@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "46cd9d51-2a6a-4aaa-81cc-5ac563e2d040",
+		"name": "capstone_Viewer_role",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET_headers_public",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/headers",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"headers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET_tickers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/tickers",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tickers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET_prices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/prices",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"prices"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFtVXQ3UG1wbFJ0NkZQQm1WN1Z0dSJ9.eyJpc3MiOiJodHRwczovL2Rldi1tamhiYmE2YS51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTI3MjI0NTI5NDM0ODgxNDE4NDYiLCJhdWQiOiJteWFwaSIsImlhdCI6MTYzNTU0OTYyNSwiZXhwIjoxNjM1NjM2MDI1LCJhenAiOiJqSmhjUXU0d3MxWVhCQUNOeEZQZ2xCSjJLeklTYjEydyIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OnRpY2tlcnMtcHJpY2VzIl19.YBQATvruyjo7Hlr2NmjwLvOPsDirKtSlc8EWGEX1ZVKLjJvOOQ2mfynmc-2u13ypsN0gpqGp2_LNVyDYWSRhlzUBcIob3MmNgWRqqqen7rNnAA-CTzh1_YBKUtUpLvSZobZmNCrXWahZR5fJ5N7ddBVsFBAB84hr7AOMMu99sR0e47PapWzsY1aLoH4wuVzPNbteEso4xPRjoHc8XOVRdfk2apVtidAopZhTTH3bBpYPQqy4XfHVqj8w4yM9v-dztg0GWSagh17fnDB-cBq1G5v9DghKP3w1El0riJJUMPd9x0L6k-awl-d6O0w5txSMy3EJWupDMQ463brUymxE9g",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

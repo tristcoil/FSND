@@ -3,20 +3,28 @@ from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # get vars from .env file
-load_dotenv()
-USERNAME = os.getenv('USERNAME')
-PASSWORD = os.getenv('PASSWORD')
-HOST_AND_PORT = os.getenv('HOST_AND_PORT')
-DATABASE_NAME = os.getenv('DATABASE_NAME')
-DATABASE_FILENAME = os.getenv('DATABASE_FILENAME')
+#load_dotenv()
+#USERNAME = os.getenv('USERNAME')
+#PASSWORD = os.getenv('PASSWORD')
+#HOST_AND_PORT = os.getenv('HOST_AND_PORT')
+#DATABASE_NAME = os.getenv('DATABASE_NAME')
+#DATABASE_FILENAME = os.getenv('DATABASE_FILENAME')
 
-project_dir = os.path.dirname(os.path.abspath(__file__))
+#project_dir = os.path.dirname(os.path.abspath(__file__))
 
-#database_path = "postgres://{}:{}@{}/{}".format(USERNAME, PASSWORD, HOST_AND_PORT, DATABASE_NAME)
-database_path = "sqlite:///{}".format(os.path.join(project_dir, DATABASE_FILENAME))
+
+# postgresql path from exported variable - CLI/Heroku
+database_path = os.environ['DATABASE_URL']
+
+
+# postgresql version
+#database_path = "postgresql://{}:{}@{}/{}".format(USERNAME, PASSWORD, HOST_AND_PORT, DATABASE_NAME)
+
+# sqlite db version
+#database_path = "sqlite:///{}".format(os.path.join(project_dir, DATABASE_FILENAME))
 
 
 db = SQLAlchemy()
@@ -82,7 +90,7 @@ class Data(db.Model):
     date       = db.Column(db.String)
     price      = db.Column(db.Integer)
     
-    ticker_id  = db.Column(db.String, db.ForeignKey('ticker.id'))
+    ticker_id  = db.Column(db.Integer, db.ForeignKey('ticker.id'))
 
 
     def __init__(self, date, price, ticker_id):

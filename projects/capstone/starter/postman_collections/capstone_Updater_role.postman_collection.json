@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "8be63ffa-8b9b-45d7-bbce-d93219d2a9c7",
+		"name": "capstone_Updater_role",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET_headers_public",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/headers",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"headers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST_ticker",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"symbol\": \"AAPL\",\n    \"name\": \"Apple\",\n    \"industry\": \"consumer electronics\",\n    \"description\": \"one of FAANG companies\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/tickers",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tickers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST_price",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"date\": \"2021-10-20\",\n    \"price\": \"150\",\n    \"ticker_id\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/prices",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"prices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_ticker",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"symbol\": \"MMM\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/tickers/1",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tickers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH_price",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"price\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/prices/1",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"prices",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE_ticker",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/tickers/4",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tickers",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE_price",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://test-app-udacity-coil.herokuapp.com/prices/1",
+					"protocol": "https",
+					"host": [
+						"test-app-udacity-coil",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"prices",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFtVXQ3UG1wbFJ0NkZQQm1WN1Z0dSJ9.eyJpc3MiOiJodHRwczovL2Rldi1tamhiYmE2YS51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTI3MjI0NTI5NDM0ODgxNDE4NDYiLCJhdWQiOiJteWFwaSIsImlhdCI6MTYzNTU0OTM3MiwiZXhwIjoxNjM1NjM1NzcyLCJhenAiOiJqSmhjUXU0d3MxWVhCQUNOeEZQZ2xCSjJLeklTYjEydyIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnRpY2tlcnMtcHJpY2VzIiwicGF0Y2g6dGlja2Vycy1wcmljZXMiLCJwb3N0OnRpY2tlcnMtcHJpY2VzIl19.myAr8lJP8SSrmghovnt0VGYhcw7pQseod3HgjFPQPIzE87rJXvnQOQ_l2xAUUlaBHQJsW-cRHvHyIUe_ltONP16ROuuxW5yyiakQTReJT6CcaAIkz8DejaSSEfQSM7pF7i38RjMsYp4GUbbQQ0v9eX7ohjbRy3sFA5vnt55ObzuowH3QaznMZYm807vn_-ZAxeSGNwDuzeHhtMoe7RF6Z6qF8QGJHtpdK3kUL_XWefi9XQZY5u1yC8q1sFCAPQlkphA9WuT3MQCSJocGzb8TkuRY1L526YD5rK0x5PPj0bWZtcTuD0l_MjbWt_Pi6Idm0c26p4C0ipYJQyaKZ_G8iA",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
