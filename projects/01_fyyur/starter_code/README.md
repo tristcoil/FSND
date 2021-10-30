@@ -232,3 +232,35 @@ regarding database submision
 - https://knowledge.udacity.com/questions/363074
 - https://knowledge.udacity.com/questions/243317
 - https://knowledge.udacity.com/questions/628095
+
+regarding flask WTF forms
+- https://github.com/udacity/FSND/tree/master/projects/01_fyyur/starter_code#data-handling-with-flask-wtf-forms
+- https://wtforms.readthedocs.io/en/2.3.x/forms/#using-forms
+
+code fixes from review
+- https://review.udacity.com/#!/reviews/3249321
+
+facebook link enum restriction
+- https://knowledge.udacity.com/questions/512901
+
+class creation in python
+- https://www.tutorialspoint.com/python3/python_classes_objects.htm
+
+WTF forms, validators, URL links
+facebook link validation (they suggest just to keep is as Optional and URL validators)
+- https://knowledge.udacity.com/questions/613331
+- https://knowledge.udacity.com/questions/514103
+
+class validator of WTF form
+- https://knowledge.udacity.com/questions/567510
+- https://knowledge.udacity.com/questions/613331
+
+
+
+
+
+
+
+
+
+

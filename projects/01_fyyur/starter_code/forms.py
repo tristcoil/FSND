@@ -1,20 +1,53 @@
 from datetime import datetime
-from flask_wtf import Form
+#from flask_wtf import Form
+from flask_wtf import FlaskForm as Form
+import flask_wtf
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, Regexp, Optional
+
+import re
+
+
+# this file is being updated based on reviever feedback
+# https://review.udacity.com/#!/reviews/3249321
+
+
+def is_valid_phone(number):
+    regex = re.compile('^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$')
+    return regex.match(number)
+
+
+
+
 
 class ShowForm(Form):
     artist_id = StringField(
-        'artist_id'
+        'artist_id', validators=[DataRequired()]
     )
     venue_id = StringField(
-        'venue_id'
+        'venue_id', validators=[DataRequired()]
     )
     start_time = DateTimeField(
         'start_time',
         validators=[DataRequired()],
         default= datetime.today()
     )
+
+    def validate(self):
+        """Define a custom validate method in your Form:"""
+      
+        validated = flask_wtf.FlaskForm.validate(self)
+        
+        print('--- show validation method ---', validated)
+        
+        
+        if not validated:
+            return False
+
+        # if no issues encountered
+        return True
+
+
 
 class VenueForm(Form):
     name = StringField(
@@ -86,7 +119,7 @@ class VenueForm(Form):
         'phone'
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[Optional(), URL()]
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
@@ -114,10 +147,10 @@ class VenueForm(Form):
         ]
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[Optional(), URL()]
     )
     website_link = StringField(
-        'website_link'
+        'website_link', validators=[Optional(), URL()]
     )
 
     seeking_talent = BooleanField( 'seeking_talent' )
@@ -125,6 +158,42 @@ class VenueForm(Form):
     seeking_description = StringField(
         'seeking_description'
     )
+
+
+    #def __init__(self, phone):
+    #    self.phone = phone
+        
+
+    def validate(self):
+        """Define a custom validate method in your Form:"""
+        
+        #self.phone = ArtistForm.phone
+        #print('*** self.phone ***', self.phone)
+        #print('---validated---', validated)
+        #print('self.phone.data', self.phone.data)  
+        #print('is valid phone', is_valid_phone(self.phone.data))      
+        
+        
+        validated = flask_wtf.FlaskForm.validate(self)
+        
+        if not validated:
+            return False
+        if not is_valid_phone(self.phone.data):
+            self.phone.errors.append('Invalid phone.')
+            return False
+        if not set(self.genres.data).issubset(dict(Genre.choices()).keys()):
+            self.genres.errors.append('Invalid genres.')
+            return False
+        if self.state.data not in dict(State.choices()).keys():
+            self.state.errors.append('Invalid state.')
+            return False
+        # if no issues encountered
+        return True
+
+
+
+
+
 
 
 
@@ -196,7 +265,7 @@ class ArtistForm(Form):
         'phone'
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[Optional(), URL()]
     )
     genres = SelectMultipleField(
         'genres', validators=[DataRequired()],
@@ -224,11 +293,11 @@ class ArtistForm(Form):
      )
     facebook_link = StringField(
         # TODO implement enum restriction
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[Optional(), URL()]
      )
 
     website_link = StringField(
-        'website_link'
+        'website_link', validators=[Optional(), URL()]
      )
 
     seeking_venue = BooleanField( 'seeking_venue' )
@@ -237,3 +306,38 @@ class ArtistForm(Form):
             'seeking_description'
      )
 
+
+    #def __init__(self):
+    #    self.phone = phone
+
+
+
+    def validate(self):
+        """Define a custom validate method in your Form:"""
+        
+        #self.phone = ArtistForm.phone
+        #print('*** self.phone ***', self.phone)
+        #print('---validated---', validated)
+        #print('self.phone.data', self.phone.data)  
+        #print('is valid phone', is_valid_phone(self.phone.data))      
+        
+        
+        validated = flask_wtf.FlaskForm.validate(self)
+        
+        if not validated:
+            return False
+        if not is_valid_phone(self.phone.data):
+            self.phone.errors.append('Invalid phone.')
+            return False
+        if not set(self.genres.data).issubset(dict(Genre.choices()).keys()):
+            self.genres.errors.append('Invalid genres.')
+            return False
+        if self.state.data not in dict(State.choices()).keys():
+            self.state.errors.append('Invalid state.')
+            return False
+        # if no issues encountered
+        return True
+        
+        
+       
+        

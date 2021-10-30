@@ -12,7 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
-from forms import *
+from forms import *               # this imports VenueForm classes reg WTF forms
 from datetime import datetime
 
 
@@ -305,37 +305,39 @@ def create_venue_submission():
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
   
-  # genres are list of valies, we need to use 'getlist method'
+    
+  # using WTF forms  
+  form = VenueForm(request.form)
+  
+  # perform WTF contents validation OK validation returns True, otherwise False
+  if form.validate():
+      pass
+  else:
+      print('Issue with WTF validation')    
+      flash('WARNING: form field did not pass validation')
+      # so stay on that submission form so user can fix contents
+      return render_template('forms/new_venue.html', form=form)  
+  
+  
   try:
-      name                = request.form.get('name')
-      city                = request.form.get('city')
-      state               = request.form.get('state')
-      address             = request.form.get('address')
-      phone               = request.form.get('phone')
-      #genres              = request.form.get('genres').data
-      #genres              = request.form['genres']
-      genres              = request.form.getlist('genres')                  # getlist method finally works
-      facebook_link       = request.form.get('facebook_link')
-      image_link          = request.form.get('image_link')
-      website_link        = request.form.get('website_link')
-      seeking_talent      = request.form.get('seeking_talent')
-      seeking_description = request.form.get('seeking_description')
-
-      venue = Venue(name=name,
-                    city=city,
-                    state=state,
-                    address=address,
-                    phone=phone,
-                    genres=genres,
-                    facebook_link=facebook_link,
-                    image_link=image_link,
-                    website_link=website_link,
-                    seeking_talent=seeking_talent,
-                    seeking_description=seeking_description
-                   )
-
+      venue = Venue(
+          name                = form.name.data,
+          city                = form.city.data,
+          state               = form.state.data,
+          address             = form.address.data,
+          phone               = form.phone.data,
+          genres              = form.genres.data,           
+          facebook_link       = form.facebook_link.data,
+          image_link          = form.image_link.data,
+          website_link        = form.website_link.data,
+          seeking_talent      = form.seeking_talent.data,
+          seeking_description = form.seeking_description.data  
+      )
+      
+      
       db.session.add(venue)
-      db.session.commit()
+      db.session.commit()  
+      
   
       # on successful db insert, flash success
       flash('Venue ' + request.form['name'] + ' was successfully listed!')
@@ -557,19 +559,39 @@ def edit_artist(artist_id):
 def edit_artist_submission(artist_id):
   # TODO: take values from the form submitted, and update existing
   # artist record with ID <artist_id> using the new attributes
+  
+  # using WTF forms  
+  form = ArtistForm(request.form)
+  
+  artist = Artist.query.get(artist_id)
+
+  # perform WTF contents validation OK validation returns True, otherwise False
+  if form.validate():
+      pass
+  else:
+      print('Issue with WTF validation')    
+      flash('WARNING: form field did not pass validation')
+      # so stay on that submission form so user can fix contents
+      return render_template('forms/edit_artist.html', form=form, artist=artist)
+
+
+
+    
   artist = Artist.query.get(artist_id)
 
   try:
-      artist.name                 = request.form.get('name')
-      artist.genres               = request.form.getlist('genres')                        
-      artist.city                 = request.form.get('city')
-      artist.state                = request.form.get('state')
-      artist.phone                = request.form.get('phone')
-      artist.website_link         = request.form.get('website_link')
-      artist.facebook_link        = request.form.get('facebook_link')
-      artist.seeking_venue        = request.form.get('seeking_venue')
-      artist.seeking_description  = request.form.get('seeking_description')
-      artist.image_link           = request.form.get('image_link') 
+      # using WTF forms
+      artist.name                 = form.name.data
+      artist.genres               = form.genres.data                        
+      artist.city                 = form.city.data
+      artist.state                = form.state.data
+      artist.phone                = form.phone.data
+      artist.website_link         = form.website_link.data
+      artist.facebook_link        = form.facebook_link.data
+      artist.seeking_venue        = form.seeking_venue.data
+      artist.seeking_description  = form.seeking_description.data
+      artist.image_link           = form.image_link.data 
+
 
       db.session.commit()
       flash('Records updated')
@@ -608,21 +630,38 @@ def edit_venue(venue_id):
 def edit_venue_submission(venue_id):
   # TODO: take values from the form submitted, and update existing
   # venue record with ID <venue_id> using the new attributes
-  
+
+  # using WTF forms  
+  form = VenueForm(request.form)
+
   venue = Venue.query.get(venue_id)
 
+  # perform WTF contents validation OK validation returns True, otherwise False
+  if form.validate():
+      pass
+  else:
+      print('Issue with WTF validation')    
+      flash('WARNING: form field did not pass validation')
+      # so stay on that submission form so user can fix contents
+      return render_template('forms/edit_venue.html', form=form, venue=venue)
+
+  
+  
+
   try:
-      venue.name                 = request.form.get('name')
-      venue.genres               = request.form.getlist('genres')                  
-      venue.address              = request.form.get('address')
-      venue.city                 = request.form.get('city')
-      venue.state                = request.form.get('state')
-      venue.phone                = request.form.get('phone')
-      venue.website_link         = request.form.get('website_link')
-      venue.facebook_link        = request.form.get('facebook_link')
-      venue.seeking_talent       = request.form.get('seeking_talent')
-      venue.seeking_description  = request.form.get('seeking_description')
-      venue.image_link           = request.form.get('image_link') 
+      # using WTF forms
+      venue.name                 = form.name.data
+      venue.genres               = form.genres.data                  
+      venue.address              = form.address.data
+      venue.city                 = form.city.data
+      venue.state                = form.state.data
+      venue.phone                = form.phone.data
+      venue.website_link         = form.website_link.data
+      venue.facebook_link        = form.facebook_link.data
+      venue.seeking_talent       = form.seeking_talent.data
+      venue.seeking_description  = form.seeking_description.data
+      venue.image_link           = form.image_link.data   
+    
 
       db.session.commit()
       flash('Records updated')
@@ -649,32 +688,37 @@ def create_artist_submission():
   # called upon submitting the new artist listing form
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
+    
+  # using WTF forms  
+  form = ArtistForm(request.form)
+  
+  # perform WTF contents validation OK validation returns True, otherwise False
+  if form.validate():
+      pass
+  else:
+      print('Issue with WTF validation')    
+      flash('WARNING: form field did not pass validation')
+      # so stay on that submission form so user can fix contents
+      return render_template('forms/new_artist.html', form=form)
+  
   try:
-      name                 = request.form.get('name')
-      city                 = request.form.get('city')
-      state                = request.form.get('state')
-      phone                = request.form.get('phone')
-      genres               = request.form.getlist('genres')
-      image_link           = request.form.get('image_link')
-      facebook_link        = request.form.get('facebook_link')
-      website_link         = request.form.get('website_link')
-      seeking_venue        = request.form.get('seeking_venue')
-      seeking_description  = request.form.get('seeking_description')
-
-      artist = Artist(name=name,
-                      city=city,
-                      state=state,
-                      phone=phone,
-                      genres=genres,
-                      image_link=image_link,
-                      facebook_link=facebook_link,
-                      website_link=website_link,
-                      seeking_venue=seeking_venue,
-                      seeking_description=seeking_description
-                      )
-                      
+      artist = Artist(
+          name                = form.name.data,
+          city                = form.city.data,
+          state               = form.state.data,
+          phone               = form.phone.data,
+          genres              = form.genres.data,           
+          facebook_link       = form.facebook_link.data,
+          image_link          = form.image_link.data,
+          website_link        = form.website_link.data,
+          seeking_venue       = form.seeking_venue.data,
+          seeking_description = form.seeking_description.data  
+      )
+      
+      
       db.session.add(artist)
-      db.session.commit()                
+      db.session.commit()    
+               
                       
       # on successful db insert, flash success
       flash('Artist ' + request.form['name'] + ' was successfully listed!')
@@ -733,18 +777,30 @@ def create_shows():
 def create_show_submission():
   # called to create new shows in the db, upon submitting new show listing form
   # TODO: insert form data as a new Show record in the db, instead
+
+  # using WTF forms  
+  form = ShowForm(request.form)
+  
+  # perform WTF contents validation OK validation returns True, otherwise False
+  if form.validate():
+      pass
+  else:
+      print('Issue with WTF validation')    
+      flash('WARNING: form field did not pass validation')
+      # so stay on that submission form so user can fix contents
+      return render_template('forms/new_show.html', form=form)  
+  
+  
   try:
-      artist_id    = request.form.get('artist_id')
-      venue_id     = request.form.get('venue_id')
-      start_time   = request.form.get('start_time')
-
-      show=Show(artist_id=artist_id,
-            venue_id=venue_id,
-            start_time=start_time
-            )
-
+      show = Show(
+          artist_id        = form.artist_id.data,
+          venue_id         = form.venue_id.data,
+          start_time       = form.start_time.data,
+      )
+            
       db.session.add(show)
-      db.session.commit()
+      db.session.commit()    
+
 
       # on successful db insert, flash success
       flash('Show was successfully listed!')
@@ -752,8 +808,9 @@ def create_show_submission():
   # TODO: on unsuccessful db insert, flash an error instead.
   # e.g., flash('An error occurred. Show could not be listed.')
   # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
-  except Exception:
-      flash('ERROR adding to a show to database')
+  except Exception as e:
+      print('ERROR: ', str(e))
+      flash('ERROR adding a show to database')
   
   return render_template('pages/home.html')
 

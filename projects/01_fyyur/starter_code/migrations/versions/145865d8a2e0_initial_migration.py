@@ -1,19 +1,17 @@
-"""empty message
+"""Initial migration.
 
-Revision ID: ad04beda2139
-Revises: 
-Create Date: 2021-08-15 22:44:43.045585
+Revision ID: 145865d8a2e0
+Revises: None
+Create Date: 2021-10-30 16:47:23.157614
 
 """
-from alembic import op
-import sqlalchemy as sa
-
 
 # revision identifiers, used by Alembic.
-revision = 'ad04beda2139'
+revision = '145865d8a2e0'
 down_revision = None
-branch_labels = None
-depends_on = None
+
+from alembic import op
+import sqlalchemy as sa
 
 
 def upgrade():
