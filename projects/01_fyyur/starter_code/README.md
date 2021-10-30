@@ -246,7 +246,15 @@ facebook link enum restriction
 class creation in python
 - https://www.tutorialspoint.com/python3/python_classes_objects.htm
 
-WTF forms, validators, URL links
+circular db imports
+- https://stackoverflow.com/questions/9692962/flask-sqlalchemy-import-context-issue/9695045#9695045
+
+
+WTF related sources - forms, validators, URL links:
+
+create custom validators - our implementation is using this to great extend
+- https://wtforms.readthedocs.io/en/2.3.x/validators/
+
 facebook link validation (they suggest just to keep is as Optional and URL validators)
 - https://knowledge.udacity.com/questions/613331
 - https://knowledge.udacity.com/questions/514103
@@ -255,7 +263,21 @@ class validator of WTF form
 - https://knowledge.udacity.com/questions/567510
 - https://knowledge.udacity.com/questions/613331
 
+examples of WTF forms
+- https://hackersandslackers.com/flask-wtforms-forms/
+- https://stackoverflow.com/questions/52103906/python-flask-wtforms-custom-validator-does-not-work
 
+for WTF form csrf issue causing failing validation
+- https://wtforms.readthedocs.io/en/2.3.x/forms/#wtforms.form.Form.errors
+- https://wtforms.readthedocs.io/en/2.3.x/meta/
+- https://knowledge.udacity.com/questions/567510
+
+other form related info
+- https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/
+
+python regular expressions
+- https://stackoverflow.com/questions/12595051/check-if-string-matches-pattern
+- https://www.guru99.com/python-regular-expressions-complete-tutorial.html
 
 
 

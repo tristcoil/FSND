@@ -74,3 +74,34 @@ fyuur=#
 
 
 
+
+
+
+
+WTF forms issues
+  # using WTF forms, turn off csrf to avoid errors during validation 'csrf_token': ['The CSRF token is missing.'] 
+  form = ArtistForm(request.form, meta={'csrf'}: False)
+
+
+
+
+python regular expressions
+https://stackoverflow.com/questions/12595051/check-if-string-matches-pattern
+>>> bool(re.match(r"^([A-Z][0-9]+)+$", 'A0'))
+True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

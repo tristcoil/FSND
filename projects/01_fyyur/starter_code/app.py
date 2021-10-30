@@ -15,7 +15,7 @@ from flask_wtf import Form
 from forms import *               # this imports VenueForm classes reg WTF forms
 from datetime import datetime
 
-
+from models import db
 
 
 
@@ -26,7 +26,12 @@ from datetime import datetime
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
-db = SQLAlchemy(app)
+
+#db = SQLAlchemy(app)   we are creating db in models.py
+db.init_app(app)
+
+
+
 
 migrate = Migrate(app, db)
 # TODO: connect to a local postgresql database
@@ -158,112 +163,44 @@ def show_venue(venue_id):
   # shows the venue page with the given venue_id
   # TODO: replace with real venue data from the venues table, using venue_id
   
-  print ('call to VENUE ID PAGE')
+  print ('--------- call to VENUE ID PAGE ----------')
   venue = Venue.query.filter_by(id=venue_id).first()
-  print('venue_name ',venue.name)
-  
-  
-  venue = Venue.query.filter_by(id=venue_id).first()
-  data = []
-  print('venue.id', venue.id)
+  print('venue_name: ', venue.name)
+  print('venue.id:   ', venue.id)
 
+  # store info about the venue into dictionary called 'data', it will have additional keys holding show info  
+  data = {} #data is dictionary , not list
    
   past_shows = []
   upcoming_shows = []
-  data = []
-  my_dict = {}
 
-  my_dict = { 
-              "id": venue.id,
-              "name": venue.name,
-              "genres": venue.genres,
-              "address": venue.address,
-              "city": venue.city,
-              "state": venue.state,
-              "phone": venue.phone,
-              "website": venue.website_link,
-              "facebook_link": venue.facebook_link,
-              "seeking_talent": venue.seeking_talent,
-              "seeking_description": venue.seeking_description,
-              "image_link": venue.image_link,  
-              "past_shows": past_shows,
-              "upcoming_shows": upcoming_shows,
-              "past_shows_count": len(past_shows),
-              "upcoming_shows_count": len(upcoming_shows)
-              }
-
-  print('my_dict', my_dict)
-  data.append(my_dict)
-  print('data: ', data)
-         
-  
-  
- 
 
   #try:
   shows = db.session.query(Show).join(Venue.shows).filter(Venue.id == venue_id).all()
-  venue = Venue.query.filter_by(id=venue_id).first()
 
-  past_shows = []
-  upcoming_shows = []
-  data = []
-  my_dict = {}
- 
-            
- 
-  for show in shows:
-      print('I GOT HERE')
-      start_time = show.start_time
-      start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+  if len(shows) == 0:
+      # we already have show lists initialized to empty list
+      pass
+  else:           
+      for show in shows:
+          print('--- iterating through shows ---')
+          start_time = show.start_time
+          start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
       
-      placeholder_show = {"artist_id": show.artist_id,
-                          "artist_name": show.artist.name,
-                          "artist_image_link": show.artist.image_link,
-                          "start_time": show.start_time
-                         }
+          placeholder_show = {"artist_id": show.artist_id,
+                              "artist_name": show.artist.name,
+                              "artist_image_link": show.artist.image_link,
+                              "start_time": show.start_time
+                             }
 
-      if start_time <= datetime.now():
-          past_shows.append(placeholder_show)
-      else:
-          upcoming_shows.append(placeholder_show)    
+          if start_time <= datetime.now():
+              past_shows.append(placeholder_show)
+          else:
+              upcoming_shows.append(placeholder_show)    
 
-
-      my_dict = { 
-              "id": venue_id,
-              "name": venue.name,
-              "genres": venue.genres,
-              "address": venue.address,
-              "city": venue.city,
-              "state": venue.state,
-              "phone": venue.phone,
-              "website": venue.website_link,
-              "facebook_link": venue.facebook_link,
-              "seeking_talent": venue.seeking_talent,
-              "seeking_description": venue.seeking_description,
-              "image_link": venue.image_link,  
-              "past_shows": past_shows,
-              "upcoming_shows": upcoming_shows,
-              "past_shows_count": len(past_shows),
-              "upcoming_shows_count": len(upcoming_shows)
-              }
-
-      print('my_dict', my_dict)
-      data.append(my_dict)
-
-  
-  #except Exception as e:
-  if len(shows) == 0:    
-      venue = Venue.query.filter_by(id=venue_id).first()
-      data = []
-      print('venue.id', venue.id)
-
-       
-      past_shows = []
-      upcoming_shows = []
-      data = []
-      my_dict = {}
-
-      my_dict = { 
+  # now we have info about the shows, 
+  # so we can populate the data dictionary
+  data = { 
               "id": venue.id,
               "name": venue.name,
               "genres": venue.genres,
@@ -275,21 +212,24 @@ def show_venue(venue_id):
               "facebook_link": venue.facebook_link,
               "seeking_talent": venue.seeking_talent,
               "seeking_description": venue.seeking_description,
-              "image_link": venue.image_link,  
+              "image_link": venue.image_link,
+                
               "past_shows": past_shows,
               "upcoming_shows": upcoming_shows,
+              
               "past_shows_count": len(past_shows),
               "upcoming_shows_count": len(upcoming_shows)
               }
 
-      print('my_dict', my_dict)
-      data.append(my_dict)
-  
   
   print('data: ', data)
+  print('upcoming shows: ', len(upcoming_shows))
+  print('past shows:     ', len(past_shows))
+ 
   
   #data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]    # for placeholder data
-  data = list(filter(lambda d: d['id'] == venue_id, data ))[0]
+  data = list(filter(lambda d: d['id'] == venue_id, [data] ))[0] 
+  
   return render_template('pages/show_venue.html', venue=data)
 
 #  Create Venue
@@ -307,14 +247,15 @@ def create_venue_submission():
   
     
   # using WTF forms  
-  form = VenueForm(request.form)
+  form = VenueForm(request.form, meta={'csrf': False})
   
   # perform WTF contents validation OK validation returns True, otherwise False
   if form.validate():
       pass
   else:
-      print('Issue with WTF validation')    
-      flash('WARNING: form field did not pass validation')
+      print('Issue with WTF validation')   
+      print('form errors: ', form.errors)
+      flash('WARNING: form field did not pass validation: ' + str(form.errors))
       # so stay on that submission form so user can fix contents
       return render_template('forms/new_venue.html', form=form)  
   
@@ -454,28 +395,32 @@ def show_artist(artist_id):
   shows = db.session.query(Show).join(Artist.shows).filter(Artist.id == artist_id).all()
   artist = Artist.query.filter_by(id=artist_id).first()
 
+  data = {}
   past_shows = []
   upcoming_shows = []
-  data = []
-  my_dict = {}
- 
-  for show in shows:
+
   
-      start_time = show.start_time
-      start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+  if len(shows) == 0:
+      # we already have show lists initialized to empty list
+      pass
+  else:   
+      for show in shows:
+  
+          start_time = show.start_time
+          start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
       
-      placeholder_show = {"venue_id": show.venue_id,
+          placeholder_show = {"venue_id": show.venue_id,
                    "venue_name": show.venue.name,
                    "venue_image_link": show.venue.image_link,
                    "start_time": show.start_time
                    }
 
-      if start_time <= datetime.now():
-          past_shows.append(placeholder_show)
-      else:
-          upcoming_shows.append(placeholder_show)    
+          if start_time <= datetime.now():
+              past_shows.append(placeholder_show)
+          else:
+              upcoming_shows.append(placeholder_show)    
 
-      my_dict = { 
+  data = { 
           "id": artist_id,
           "name": artist.name,
           "genres": artist.genres,
@@ -486,51 +431,20 @@ def show_artist(artist_id):
           "facebook_link": artist.facebook_link,
           "seeking_venue": artist.seeking_venue,
           "seeking_description": artist.seeking_description,
-          "image_link": artist.image_link,  
+          "image_link": artist.image_link,
+            
           "past_shows": past_shows,
           "upcoming_shows": upcoming_shows,
+          
           "past_shows_count": len(past_shows),
           "upcoming_shows_count": len(upcoming_shows)
-          }
+         }
 
-      print('my_dict', my_dict)
-      data.append(my_dict)
-
-  if len(shows) == 0:    
-      artist = Artist.query.filter_by(id=artist_id).first()
-      data = []
-      print('artist.id', artist.id)
-
-       
-      past_shows = []
-      upcoming_shows = []
-      data = []
-      my_dict = {}
-
-      my_dict = { 
-              "id": artist.id,
-              "name": artist.name,
-              "genres": artist.genres,
-              "city": artist.city,
-              "state": artist.state,
-              "phone": artist.phone,
-              "website": artist.website_link,
-              "facebook_link": artist.facebook_link,
-              "seeking_venue": artist.seeking_venue,
-              "seeking_description": artist.seeking_description,
-              "image_link": artist.image_link,  
-              "past_shows": past_shows,
-              "upcoming_shows": upcoming_shows,
-              "past_shows_count": len(past_shows),
-              "upcoming_shows_count": len(upcoming_shows)
-              }
-
-      print('my_dict', my_dict)
-      data.append(my_dict)  
+ 
       
   
   #data = list(filter(lambda d: d['id'] == artist_id, [my_dict, data1, data2, data3] ))[0]     
-  data = list(filter(lambda d: d['id'] == artist_id, data ))[0]   # with my payload
+  data = list(filter(lambda d: d['id'] == artist_id, [data] ))[0]   # with my payload
   return render_template('pages/show_artist.html', artist=data)
 
 #  Update
@@ -561,7 +475,7 @@ def edit_artist_submission(artist_id):
   # artist record with ID <artist_id> using the new attributes
   
   # using WTF forms  
-  form = ArtistForm(request.form)
+  form = ArtistForm(request.form, meta={'csrf': False})
   
   artist = Artist.query.get(artist_id)
 
@@ -569,8 +483,9 @@ def edit_artist_submission(artist_id):
   if form.validate():
       pass
   else:
-      print('Issue with WTF validation')    
-      flash('WARNING: form field did not pass validation')
+      print('Issue with WTF validation')   
+      print('form errors: ', form.errors)
+      flash('WARNING: form field did not pass validation: ' + str(form.errors))
       # so stay on that submission form so user can fix contents
       return render_template('forms/edit_artist.html', form=form, artist=artist)
 
@@ -632,7 +547,7 @@ def edit_venue_submission(venue_id):
   # venue record with ID <venue_id> using the new attributes
 
   # using WTF forms  
-  form = VenueForm(request.form)
+  form = VenueForm(request.form, meta={'csrf': False})
 
   venue = Venue.query.get(venue_id)
 
@@ -640,8 +555,9 @@ def edit_venue_submission(venue_id):
   if form.validate():
       pass
   else:
-      print('Issue with WTF validation')    
-      flash('WARNING: form field did not pass validation')
+      print('Issue with WTF validation')   
+      print('form errors: ', form.errors)
+      flash('WARNING: form field did not pass validation: ' + str(form.errors))
       # so stay on that submission form so user can fix contents
       return render_template('forms/edit_venue.html', form=form, venue=venue)
 
@@ -689,18 +605,21 @@ def create_artist_submission():
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
     
-  # using WTF forms  
-  form = ArtistForm(request.form)
+  # using WTF forms, turn off csrf to avoid errors during validation 'csrf_token': ['The CSRF token is missing.'] 
+  form = ArtistForm(request.form, meta={'csrf': False})
+  
   
   # perform WTF contents validation OK validation returns True, otherwise False
   if form.validate():
       pass
   else:
-      print('Issue with WTF validation')    
-      flash('WARNING: form field did not pass validation')
+      print('Issue with WTF validation')   
+      print('form errors: ', form.errors)
+      flash('WARNING: form field did not pass validation: ' + str(form.errors))
       # so stay on that submission form so user can fix contents
       return render_template('forms/new_artist.html', form=form)
   
+
   try:
       artist = Artist(
           name                = form.name.data,
@@ -779,14 +698,15 @@ def create_show_submission():
   # TODO: insert form data as a new Show record in the db, instead
 
   # using WTF forms  
-  form = ShowForm(request.form)
+  form = ShowForm(request.form, meta={'csrf': False})
   
   # perform WTF contents validation OK validation returns True, otherwise False
   if form.validate():
       pass
   else:
-      print('Issue with WTF validation')    
-      flash('WARNING: form field did not pass validation')
+      print('Issue with WTF validation')   
+      print('form errors: ', form.errors)
+      flash('WARNING: form field did not pass validation: ' + str(form.errors))
       # so stay on that submission form so user can fix contents
       return render_template('forms/new_show.html', form=form)  
   
